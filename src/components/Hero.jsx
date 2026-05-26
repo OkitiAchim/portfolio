@@ -267,6 +267,11 @@ export default function Hero() {
             "radial-gradient(ellipse at center, transparent 35%, rgba(3,3,5,0.6) 75%, rgba(3,3,5,0.92) 100%)",
         }}
       />
+      {/* ── Bottom fade into DiscoverMore ── */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32 z-[2] pointer-events-none"
+        style={{ background: "linear-gradient(transparent, rgba(3,3,5,0.9))" }}
+      />
 
       {/* ── Main content grid ─────────────────────────────────────────── */}
       <div className="relative z-[10] w-full max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-24 lg:py-0">

@@ -47,7 +47,7 @@ export default function Navbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             className="font-display text-xl font-semibold tracking-[0.18em] uppercase text-white/88 cursor-pointer select-none"
           >
-            VW<span className="text-indigo-400/80">.</span>
+            OV<span className="text-indigo-400/80">.</span>
           </motion.div>
 
           {/* ── Desktop links ── */}
