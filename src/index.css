@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap");
-
+@import url("https://fonts.cdnfonts.com/css/neue-montreal");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,13 +15,46 @@
     scroll-behavior: smooth;
   }
 
+  /* =========================
+     TYPOGRAPHY SYSTEM
+  ========================== */
+
+  /* DISPLAY TEXT → Syne (Headings only) */
+  h1,
+  h2,
+  h3,
+  .display {
+    font-family: "Syne", sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* BODY TEXT → DM Sans */
   body {
     background-color: #030305;
     color: #ffffff;
     font-family: "DM Sans", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improve readability consistency */
+  p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* UI LABELS → DM Sans uppercase tracking */
+  .label {
+    font-family: "DM Sans", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(129, 140, 248, 0.75);
   }
 
   ::selection {
@@ -32,13 +65,16 @@
   ::-webkit-scrollbar {
     width: 4px;
   }
+
   ::-webkit-scrollbar-track {
     background: #0a0a0f;
   }
+
   ::-webkit-scrollbar-thumb {
     background: rgba(99, 102, 241, 0.4);
     border-radius: 2px;
   }
+
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(99, 102, 241, 0.6);
   }

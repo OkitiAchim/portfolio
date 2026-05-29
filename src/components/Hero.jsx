@@ -287,8 +287,8 @@ export default function Hero() {
             {/* Headline */}
             <motion.h1
               variants={itemVariants}
-              className="font-syne font-bold leading-[1.05] tracking-tight"
-              style={{ fontSize: "clamp(2.4rem, 5vw, 3.8rem)" }}
+              className="font-syne font-bold leading-[1.02] tracking-tight"
+              style={{ fontSize: "clamp(3rem, 6vw, 4rem)" }}
             >
               Building Systems
               <br />
@@ -303,9 +303,9 @@ export default function Hero() {
               className="text-[15px] leading-relaxed font-light max-w-[420px]"
               style={{ color: "rgba(255,255,255,0.45)" }}
             >
-              Frontend developer crafting high-performance web applications,
-              interactive geospatial platforms, and AI-powered experiences for
-              ambitious products and teams.
+              Crafting high-performance web applications, interactive geospatial
+              platforms, and AI-powered experiences for ambitious products and
+              teams.
             </motion.p>
 
             {/* CTA buttons */}
@@ -313,10 +313,12 @@ export default function Hero() {
               variants={itemVariants}
               className="flex flex-wrap gap-3 mt-2"
             >
-              <button className="btn-gradient inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white glow-indigo">
-                View My Work
-                <ArrowRight size={15} />
-              </button>
+              <a href="#projects">
+                <button className="btn-gradient inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white glow-indigo">
+                  View Projects
+                  <ArrowRight size={15} />
+                </button>
+              </a>
               <button className="btn-ghost inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white/60">
                 <ExternalLink size={15} />
                 Let's Talk
