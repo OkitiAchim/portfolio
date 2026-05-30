@@ -107,6 +107,7 @@ export default function Projects() {
 
   return (
     <section
+      id="work"
       ref={sectionRef}
       className="relative min-h-screen w-full overflow-hidden bg-[#030305] text-white"
     >
@@ -154,7 +155,7 @@ export default function Projects() {
         {/* HEADER */}
         <div className="max-w-3xl mb-24">
           <p className="text-[11px] tracking-[0.35em] uppercase text-indigo-300/70 mb-5">
-            Selected Work & Experiences
+            Work & Experiences
           </p>
 
           <h1
@@ -207,17 +208,24 @@ export default function Projects() {
           ))}
         </div>
         {/* ── Bottom Caption (Refined Minimal Version) ── */}
-        <div className="mt-28 flex flex-col items-center text-center opacity-90">
+        <div
+          onClick={() =>
+            document.getElementById("about")?.scrollIntoView({
+              behavior: "smooth",
+            })
+          }
+          className="mt-28 flex flex-col items-center text-center opacity-90 cursor-pointer group transition-transform duration-300 hover:-translate-y-1"
+        >
           {/* vertical accent line */}
           <div className="w-px h-20 bg-gradient-to-b from-indigo-400/40 via-cyan-400/20 to-transparent mb-6" />
 
           {/* small label */}
-          <p className="text-white/30 uppercase tracking-[0.35em] text-[10px] inline-block animate-float-slow">
+          <p className="text-white/30 uppercase tracking-[0.35em] text-[10px] inline-block animate-float-slow group-hover:text-white/60 transition">
             Continue Exploring
           </p>
 
           {/* main line */}
-          <h3 className="mt-3 text-xl lg:text-3xl font-syne font-bold text-white/80 tracking-tight">
+          <h3 className="mt-3 text-xl lg:text-3xl font-syne font-bold text-white/80 tracking-tight group-hover:text-white transition">
             Every interface tells a story.
           </h3>
         </div>

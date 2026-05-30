@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import DiscoverMore from "../components/DiscoverMore";
 import Projects from "../components/Projects";
 import About from "../components/About";
+import Skills from "../components/Skills";
+import Contact from "../components/Contact";
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#030305]">
@@ -11,6 +13,8 @@ export default function Home() {
       <DiscoverMore />
       <Projects />
       <About />
+      <Skills />
+      <Contact />
       {/* More sections will be added in Phase 3 */}
     </main>
   );

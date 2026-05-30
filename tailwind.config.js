@@ -29,6 +29,20 @@ export default {
         "pulse-slow": "pulse 3s ease-in-out infinite",
         drift: "drift linear infinite",
         shimmer: "shimmer 3s ease-in-out infinite",
+        animation: {
+          marquee: "marquee 28s linear infinite",
+        },
+
+        keyframes: {
+          marquee: {
+            "0%": {
+              transform: "translateX(0)",
+            },
+            "100%": {
+              transform: "translateX(-50%)",
+            },
+          },
+        },
       },
       keyframes: {
         float: {

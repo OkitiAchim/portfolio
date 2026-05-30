@@ -235,15 +235,25 @@ export default function About() {
         </div>
 
         {/* bottom caption */}
-        <div className="mt-32 flex flex-col items-center text-center opacity-90">
-          <div className="w-px h-20 bg-gradient-to-b from-black/40 via-black/15 to-transparent mb-6" />
+        <div
+          onClick={() =>
+            document.getElementById("skills")?.scrollIntoView({
+              behavior: "smooth",
+            })
+          }
+          className="mt-28 flex flex-col items-center text-center opacity-90 cursor-pointer group transition-transform duration-300 hover:-translate-y-1"
+        >
+          {/* vertical accent line */}
+          <div className="w-px h-20 bg-gradient-to-b from-indigo-400/40 via-cyan-400/20 to-transparent mb-6" />
 
+          {/* small label */}
           <p className="text-black/35 uppercase tracking-[0.35em] text-[10px] animate-float-slow">
             Continue Exploring
           </p>
 
-          <h3 className="mt-3 text-xl lg:text-3xl font-syne font-bold text-black/75 tracking-tight">
-            Designed with intention. Built to endure.
+          {/* main line */}
+          <h3 className="mt-3 mb-1 text-xl lg:text-3xl font-syne font-bold text-black/75 tracking-tight group-hover:text-black/90 transition">
+            Designed with intention,built to endure.
           </h3>
         </div>
       </div>

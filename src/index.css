@@ -15,11 +15,6 @@
     scroll-behavior: smooth;
   }
 
-  /* =========================
-     TYPOGRAPHY SYSTEM
-  ========================== */
-
-  /* DISPLAY TEXT → Syne (Headings only) */
   h1,
   h2,
   h3,
@@ -28,7 +23,6 @@
     letter-spacing: -0.02em;
   }
 
-  /* BODY TEXT → DM Sans */
   body {
     background-color: #030305;
     color: #ffffff;
@@ -40,14 +34,12 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Improve readability consistency */
   p {
     font-size: 1rem;
     line-height: 1.7;
     color: rgba(255, 255, 255, 0.7);
   }
 
-  /* UI LABELS → DM Sans uppercase tracking */
   .label {
     font-family: "DM Sans", sans-serif;
     text-transform: uppercase;
@@ -81,6 +73,26 @@
 }
 
 @layer utilities {
+  .marquee-track {
+    animation: marqueeScroll 55s linear infinite;
+    width: max-content;
+    will-change: transform;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes marqueeScroll {
+    0% {
+      transform: translateX(0%);
+    }
+
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
   .glass {
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(20px);
