@@ -275,7 +275,7 @@ export default function Hero() {
 
       {/* ── Main content grid ─────────────────────────────────────────── */}
       <div className="relative z-[10] w-full max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-24 lg:py-0">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-screen lg:min-h-0 lg:py-32">
+        <div className="grid grid-cols-1  gap-12 lg:gap-16 items-center min-h-screen lg:min-h-0 lg:py-32">
           {/* ── LEFT – Copy ──────────────────────────────────────────── */}
           <motion.div
             className="flex flex-col gap-6"
@@ -288,7 +288,7 @@ export default function Hero() {
             <motion.h1
               variants={itemVariants}
               className="font-syne font-bold leading-[1.02] tracking-tight"
-              style={{ fontSize: "clamp(3rem, 6vw, 4rem)" }}
+              style={{ fontSize: "clamp(3rem, 6vw, 3.5rem)" }}
             >
               Building Systems
               <br />
@@ -319,10 +319,12 @@ export default function Hero() {
                   <ArrowRight size={15} />
                 </button>
               </a>
-              <button className="btn-ghost inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white/60">
-                <ExternalLink size={15} />
-                Let's Talk
-              </button>
+              <a href="#contact">
+                <button className="btn-ghost inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-medium text-white/60">
+                  <ExternalLink size={15} />
+                  Let's Talk
+                </button>
+              </a>
             </motion.div>
 
             {/* Stats row */}
@@ -332,8 +334,8 @@ export default function Hero() {
               style={{ borderColor: "rgba(255,255,255,0.07)" }}
             >
               {[
-                { num: "2+", label: "Years Building" },
-                { num: "12+", label: "Projects Shipped" },
+                { num: "3+", label: "Years Building" },
+                { num: "10+", label: "Projects Shipped" },
                 { num: "5+", label: "Active Projects" },
               ].map((s) => (
                 <div key={s.label} className="flex flex-col gap-0.5">

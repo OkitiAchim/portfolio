@@ -161,21 +161,11 @@ export default function Contact() {
           </form>
         </motion.div>
 
-        {/* STATUS */}
-        <div className="mt-16 flex items-center justify-center gap-3 text-white/40 text-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-          </span>
-          Available for freelance & collaborations
-        </div>
-
         {/* FOOTER */}
-        <div className="mt-24 border-t border-white/10 pt-10 flex flex-col md:flex-row items-center justify-between gap-8 text-white/40 text-sm">
+        <div className="mt-24 border-t border-white/10 pt-10 flex flex-col  md:flex-row items-center justify-between gap-8 text-white/40 text-sm">
           {/* COPYRIGHT */}
           <p className="tracking-wide hover:text-white/60 transition">
-            © {new Date().getFullYear()} Oghenevwegba Okiti. All rights
-            reserved.
+            © {new Date().getFullYear()} AchimOkiti.dev All rights reserved.
           </p>
 
           {/* EMAIL */}
@@ -195,6 +185,10 @@ export default function Contact() {
           >
             <MessageCircle size={16} />
             <span>WhatsApp</span>
+          </a>
+
+          <a>
+            <span>+234 906 370 3235</span>
           </a>
         </div>
       </div>

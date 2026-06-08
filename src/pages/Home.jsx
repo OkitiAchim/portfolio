@@ -5,7 +5,13 @@ import Projects from "../components/Projects";
 import About from "../components/About";
 import Skills from "../components/Skills";
 import Contact from "../components/Contact";
+import { useEffect } from "react";
+
 export default function Home() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#030305]">
       <Navbar />
@@ -15,7 +21,6 @@ export default function Home() {
       <About />
       <Skills />
       <Contact />
-      {/* More sections will be added in Phase 3 */}
     </main>
   );
 }

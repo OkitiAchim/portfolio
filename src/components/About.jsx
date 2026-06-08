@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
+import phoneView from "../assets/phoneView.jpg";
 
 export default function About() {
   const sectionRef = useRef(null);
@@ -82,9 +83,7 @@ export default function About() {
         }}
       />
 
-      {/* ─────────────────────────────────────────
-         LIQUID RIPPLE LAYER
-      ───────────────────────────────────────── */}
+      {/* LIQUID RIPPLE LAYER*/}
 
       {/* Main soft liquid glow */}
       <motion.div
@@ -129,9 +128,7 @@ export default function About() {
         }}
       />
 
-      {/* ─────────────────────────────────────────
-         TOP SHADOW TRANSITION
-      ───────────────────────────────────────── */}
+      {/*TOP SHADOW TRANSITION*/}
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none"
         style={{
@@ -140,63 +137,92 @@ export default function About() {
         }}
       />
 
-      {/* ─────────────────────────────────────────
-         CONTENT
-      ───────────────────────────────────────── */}
+      {/* CONTENT*/}
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-32">
-        {/* heading */}
-        <div className="max-w-3xl mb-28">
-          <p className="text-[11px] tracking-[0.35em] uppercase text-black/40 mb-5 font-medium">
-            About & Capabilities
-          </p>
+        {/* heading + image grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
+          {/* LEFT SIDE — TEXT */}
+          <div className="max-w-3xl">
+            <p className="text-[11px] tracking-[0.35em] uppercase text-black/40 mb-5 font-medium">
+              About & Capabilities
+            </p>
+            <h1
+              className="font-syne font-bold tracking-tight leading-[1.02]"
+              style={{
+                fontSize: "clamp(3rem, 6vw, 3rem)",
+              }}
+            >
+              Building immersive
+              <br />
+              digital systems
+              <br />
+              with precision.
+            </h1>
 
-          <h1
-            className="font-syne font-bold tracking-tight leading-[1.02]"
-            style={{
-              fontSize: "clamp(3rem, 6vw, 3rem)",
-            }}
-          >
-            Building immersive
-            <br />
-            digital systems
-            <br />
-            with precision.
-          </h1>
+            <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
 
-          <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
+            <p className="mt-10 text-black/60 text-lg leading-relaxed max-w-2xl font-dm">
+              I build immersive frontend experiences and scalable digital
+              systems that combine visual precision, interaction design, and
+              modern web engineering. My work lives at the intersection of
+              creativity, performance, and structure — crafting interfaces that
+              feel fluid, intentional, and deeply human.
+            </p>
+            {/* values / philosophy */}
+            <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-10">
+              <h1
+                className="font-syne font-bold tracking-tight leading-[1.02]"
+                style={{
+                  fontSize: "clamp(3rem, 6vw, 3rem)",
+                }}
+              >
+                Experiences
+                <br />
+                that feels
+                <br />
+                alive.
+              </h1>
+              <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
+              <p className="mt-0 text-black/55 leading-relaxed text-lg max-w-xl">
+                Every interaction should feel intentional. Every transition
+                should carry weight. I approach interfaces as living systems —
+                blending motion, rhythm, typography, and engineering into
+                experiences that communicate beyond visuals alone.
+              </p>
+            </div>
+          </div>
 
-          <p className="mt-10 text-black/60 text-lg leading-relaxed max-w-2xl font-dm">
-            I build immersive frontend experiences and scalable digital systems
-            that combine visual precision, interaction design, and modern web
-            engineering. My work lives at the intersection of creativity,
-            performance, and structure — crafting interfaces that feel fluid,
-            intentional, and deeply human.
-          </p>
+          {/* RIGHT SIDE — IMAGE */}
+          <div className="relative w-full flex justify-center lg:justify-end">
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: 250,
+                scale: 0.9,
+              }}
+              whileInView={{
+                opacity: 1,
+                x: 0,
+                scale: 1,
+              }}
+              viewport={{
+                once: false,
+                amount: 0.3,
+              }}
+              transition={{
+                duration: 2.2,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              className="relative w-full max-w-[480px]"
+            >
+              <img
+                src={phoneView}
+                alt="Phone mockup"
+                className="w-full h-auto"
+              />
+            </motion.div>
+          </div>
         </div>
-
-        {/* values / philosophy */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-10">
-          <h1
-            className="font-syne font-bold tracking-tight leading-[1.02]"
-            style={{
-              fontSize: "clamp(3rem, 6vw, 3rem)",
-            }}
-          >
-            Experiences
-            <br />
-            that feels
-            <br />
-            alive.
-          </h1>
-          <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
-          <p className="mt-0 text-black/55 leading-relaxed text-lg max-w-xl">
-            Every interaction should feel intentional. Every transition should
-            carry weight. I approach interfaces as living systems — blending
-            motion, rhythm, typography, and engineering into experiences that
-            communicate beyond visuals alone.
-          </p>
-        </div>
-
         {/* values / philosophy */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-24 shadow-sm">
           {[

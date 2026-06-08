@@ -7,20 +7,80 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
+
     window.addEventListener("scroll", onScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /**
+   * Handle click navigation
+   * Keeps your original click highlight behavior
+   */
   const handleNav = (link) => {
     setActive(link);
+    setHasInteracted(true);
     setMenuOpen(false);
-    const el = document.getElementById(link.toLowerCase());
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+
+    const id = link === "Work" ? "projects" : link.toLowerCase();
+
+    const el = document.getElementById(id);
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   };
 
+  /**
+   * Scroll Spy (FIXED + STABLE)
+   * Updates active section based on viewport
+   */
+  useEffect(() => {
+    const sectionIds = NAV_LINKS.map((link) =>
+      link === "Work" ? "projects" : link.toLowerCase(),
+    );
+
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      let current = null;
+
+      for (let id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+
+        const top = el.offsetTop;
+        const bottom = top + el.offsetHeight;
+
+        if (scrollPos >= top && scrollPos < bottom) {
+          current =
+            id === "projects"
+              ? "Work"
+              : id.charAt(0).toUpperCase() + id.slice(1);
+          break;
+        }
+      }
+
+      // KEY FIX: only activate after user interaction
+      if (hasInteracted) {
+        setActive(current);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasInteracted]);
+  useEffect(() => {
+    setActive(null);
+  }, []);
   return (
     <>
       <motion.header
@@ -44,7 +104,10 @@ export default function Navbar() {
           {/* ── Logo ── */}
           <motion.div
             whileHover={{ scale: 1.03 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() => {
+              setActive(null);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             className="font-display text-xl font-semibold tracking-[0.18em] uppercase text-white/88 cursor-pointer select-none"
           >
             unbox<span className="text-indigo-400/80">.</span>
@@ -74,7 +137,11 @@ export default function Navbar() {
                   <motion.span
                     layoutId="nav-pill"
                     className="absolute inset-0 rounded-xl bg-white/[0.05] border border-white/[0.08]"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                    transition={{
+                      type: "spring",
+                      bounce: 0.25,
+                      duration: 0.6,
+                    }}
                   />
                 )}
 
@@ -82,13 +149,17 @@ export default function Navbar() {
                   className={`
                     relative z-10 text-[10px] tracking-[0.22em] uppercase font-sans font-light
                     transition-colors duration-300
-                    ${active === link ? "text-white/90" : "text-white/70 group-hover:text-white/65"}
+                    ${
+                      active === link
+                        ? "text-white/90"
+                        : "text-white/70 group-hover:text-white/65"
+                    }
                   `}
                 >
                   {link}
                 </span>
 
-                {/* Underline hover */}
+                {/* Hover underline */}
                 <span
                   className="
                     absolute bottom-1 left-1/2 -translate-x-1/2
@@ -109,7 +180,7 @@ export default function Navbar() {
           >
             <motion.span
               animate={menuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-              className="block w-5 h-[1px] bg-white/50 origin-center transition-all"
+              className="block w-5 h-[1px] bg-white/50 origin-center"
             />
             <motion.span
               animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
@@ -117,13 +188,13 @@ export default function Navbar() {
             />
             <motion.span
               animate={menuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-              className="block w-5 h-[1px] bg-white/50 origin-center transition-all"
+              className="block w-5 h-[1px] bg-white/50 origin-center"
             />
           </button>
         </div>
       </motion.header>
 
-      {/* ── Mobile menu overlay ── */}
+      {/* ── Mobile menu ── */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div

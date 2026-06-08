@@ -14,36 +14,42 @@ export default function Projects() {
       title: "Frontend Engineering",
       description:
         "Interactive interfaces, motion-driven experiences, responsive systems, and immersive UI architecture.",
+      link: "https://your-frontend-project.com",
     },
     {
       id: "02",
       title: "Creative Development",
       description:
         "Experimental visuals, cinematic transitions, modern web animations, and immersive storytelling.",
+      link: "",
     },
     {
       id: "03",
-      title: "Geology & Research",
+      title: "Geospatial Environmental Risk Dashboard",
       description:
         "Scientific research, environmental analysis, geospatial interpretation, and technical documentation.",
+      link: "https://geo-risk-dashboard.netlify.app/",
     },
     {
       id: "04",
       title: "Geology & Research",
       description:
         "Scientific research, environmental analysis, geospatial interpretation, and technical documentation.",
+      link: "",
     },
     {
       id: "05",
-      title: "Geology & Research",
+      title: "E-commerce & Product Design",
       description:
         "Scientific research, environmental analysis, geospatial interpretation, and technical documentation.",
+      link: "",
     },
     {
       id: "06",
-      title: "Geology & Research",
+      title: "Photography & Cinematography",
       description:
         "Scientific research, environmental analysis, geospatial interpretation, and technical documentation.",
+      link: "",
     },
   ];
 
@@ -197,12 +203,16 @@ export default function Projects() {
                   {project.description}
                 </p>
 
-                <div className="flex-1" />
-
-                {/* BUTTON */}
-                <button className="mt-10 self-start rounded-full border border-white/10 px-8 py-4 text-sm uppercase tracking-[0.25em] text-white/70 hover:text-white hover:border-indigo-400/40 transition">
-                  View Project
-                </button>
+                <div className="mt-10 flex justify-center">
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block rounded-full border border-white/10 px-8 py-4 text-sm uppercase tracking-[0.25em] text-white/70 hover:text-white hover:border-indigo-400/40 transition"
+                  >
+                    View Project
+                  </a>
+                </div>
               </div>
             </div>
           ))}
