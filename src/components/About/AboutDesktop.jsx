@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import phoneView from "../assets/phoneView.jpg";
+import phoneView from "../../assets/phoneView.png";
 
 export default function About() {
   const sectionRef = useRef(null);
@@ -11,7 +11,6 @@ export default function About() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  /* smooth liquid lag */
   const smoothX = useSpring(mouseX, {
     stiffness: 90,
     damping: 22,
@@ -31,7 +30,9 @@ export default function About() {
     mouseY.set(e.clientY - rect.top);
   };
 
-  /* intro animation */
+  /* ─────────────────────────────────────────────
+     INTRO ANIMATION
+  ───────────────────────────────────────────── */
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function About() {
          GRID OVERLAY
       ───────────────────────────────────────── */}
       <div
-        className="absolute inset-0 opacity-60 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-60"
         style={{
           backgroundImage:
             "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
@@ -83,9 +84,9 @@ export default function About() {
         }}
       />
 
-      {/* LIQUID RIPPLE LAYER*/}
-
-      {/* Main soft liquid glow */}
+      {/* ─────────────────────────────────────────
+         LIQUID RIPPLE — MAIN GLOW
+      ───────────────────────────────────────── */}
       <motion.div
         className="absolute pointer-events-none z-[1]"
         style={{
@@ -103,7 +104,9 @@ export default function About() {
         }}
       />
 
-      {/* Secondary ripple */}
+      {/* ─────────────────────────────────────────
+         SECONDARY RIPPLE
+      ───────────────────────────────────────── */}
       <motion.div
         className="absolute pointer-events-none z-[1]"
         style={{
@@ -128,7 +131,9 @@ export default function About() {
         }}
       />
 
-      {/*TOP SHADOW TRANSITION*/}
+      {/* ─────────────────────────────────────────
+         TOP SHADOW TRANSITION
+      ───────────────────────────────────────── */}
       <div
         className="absolute top-0 left-0 right-0 h-24 pointer-events-none"
         style={{
@@ -137,22 +142,27 @@ export default function About() {
         }}
       />
 
-      {/* CONTENT*/}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-32">
-        {/* heading + image grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-20">
-          {/* LEFT SIDE — TEXT */}
+      {/* ─────────────────────────────────────────
+         MAIN CONTENT
+      ───────────────────────────────────────── */}
+      <div className="relative z-10 max-w-7xl mx-auto px-10 py-32">
+        {/* ─────────────────────────────────────
+           HEADING + IMAGE
+        ───────────────────────────────────── */}
+        <div className="grid grid-cols-2 gap-16 items-start mb-20">
+          {/* LEFT — TEXT */}
           <div className="max-w-3xl">
             <p className="text-[11px] tracking-[0.35em] uppercase text-black/40 mb-5 font-medium">
-              About & Capabilities
+              About &amp; Capabilities
             </p>
+
             <h1
               className="font-syne font-bold tracking-tight leading-[1.02]"
               style={{
-                fontSize: "clamp(3rem, 6vw, 3rem)",
+                fontSize: "3rem",
               }}
             >
-              Building immersive
+              Crafting immersive
               <br />
               digital systems
               <br />
@@ -162,18 +172,21 @@ export default function About() {
             <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
 
             <p className="mt-10 text-black/60 text-lg leading-relaxed max-w-2xl font-dm">
-              I build immersive frontend experiences and scalable digital
+              I create immersive frontend experiences and scalable digital
               systems that combine visual precision, interaction design, and
               modern web engineering. My work lives at the intersection of
               creativity, performance, and structure — crafting interfaces that
               feel fluid, intentional, and deeply human.
             </p>
-            {/* values / philosophy */}
-            <div className="grid grid-cols-1 md:grid-cols-1 gap-5 mt-10">
+
+            {/* ─────────────────────────────────
+               VALUES / PHILOSOPHY
+            ───────────────────────────────── */}
+            <div className="grid grid-cols-1 gap-5 mt-10">
               <h1
                 className="font-syne font-bold tracking-tight leading-[1.02]"
                 style={{
-                  fontSize: "clamp(3rem, 6vw, 3rem)",
+                  fontSize: "3rem",
                 }}
               >
                 Experiences
@@ -182,7 +195,9 @@ export default function About() {
                 <br />
                 alive.
               </h1>
+
               <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
+
               <p className="mt-0 text-black/55 leading-relaxed text-lg max-w-xl">
                 Every interaction should feel intentional. Every transition
                 should carry weight. I approach interfaces as living systems —
@@ -192,8 +207,8 @@ export default function About() {
             </div>
           </div>
 
-          {/* RIGHT SIDE — IMAGE */}
-          <div className="relative w-full flex justify-center lg:justify-end">
+          {/* RIGHT — IMAGE */}
+          <div className="relative w-full flex justify-end">
             <motion.div
               initial={{
                 opacity: 0,
@@ -223,8 +238,11 @@ export default function About() {
             </motion.div>
           </div>
         </div>
-        {/* values / philosophy */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-24 shadow-sm">
+
+        {/* ─────────────────────────────────────────
+           VALUES CARDS
+        ───────────────────────────────────────── */}
+        <div className="grid grid-cols-3 gap-10 mt-24 shadow-sm">
           {[
             {
               title: "Precision",
@@ -241,9 +259,22 @@ export default function About() {
           ].map((item, i) => (
             <div
               key={i}
-              className="relative overflow-hidden rounded-[28px] border border-black/6 bg-white/40 backdrop-blur-xl p-8
-                        transition-all duration-500 ease-out shadow-lg
-                        hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]"
+              className="
+                relative
+                overflow-hidden
+                rounded-[28px]
+                border
+                border-black/6
+                bg-white/40
+                backdrop-blur-xl
+                p-8
+                transition-all
+                duration-500
+                ease-out
+                shadow-lg
+                hover:-translate-y-2
+                hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]
+              "
             >
               <div className="absolute inset-0 bg-gradient-to-br from-black/[0.02] to-transparent" />
 
@@ -260,25 +291,36 @@ export default function About() {
           ))}
         </div>
 
-        {/* bottom caption */}
+        {/* ─────────────────────────────────────────
+           BOTTOM CAPTION
+        ───────────────────────────────────────── */}
         <div
           onClick={() =>
-            document.getElementById("skills")?.scrollIntoView({
+            document.getElementById("services")?.scrollIntoView({
               behavior: "smooth",
             })
           }
-          className="mt-28 flex flex-col items-center text-center opacity-90 cursor-pointer group transition-transform duration-300 hover:-translate-y-1"
+          className="
+            mt-28
+            flex
+            flex-col
+            items-center
+            text-center
+            opacity-90
+            cursor-pointer
+            group
+            transition-transform
+            duration-300
+            hover:-translate-y-1
+          "
         >
-          {/* vertical accent line */}
           <div className="w-px h-20 bg-gradient-to-b from-indigo-400/40 via-cyan-400/20 to-transparent mb-6" />
 
-          {/* small label */}
           <p className="text-black/35 uppercase tracking-[0.35em] text-[10px] animate-float-slow">
             Continue Exploring
           </p>
 
-          {/* main line */}
-          <h3 className="mt-3 mb-1 text-xl lg:text-3xl font-syne font-bold text-black/75 tracking-tight group-hover:text-black/90 transition">
+          <h3 className="mt-3 mb-1 text-3xl font-syne font-bold text-black/75 tracking-tight group-hover:text-black/90 transition">
             Designed with intention,built to endure.
           </h3>
         </div>

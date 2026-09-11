@@ -69,7 +69,48 @@
     gap: 18px;
   }
 }
+.heartbeat-trace {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: ecgTrace 10s linear infinite;
+  filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.45));
+}
 
+@keyframes ecgTrace {
+  0% {
+    stroke-dashoffset: 1200;
+    opacity: 0;
+  }
+
+  /* line appears completely normal */
+  8% {
+    stroke-dashoffset: 1200;
+    opacity: 0;
+  }
+
+  /* trace suddenly starts */
+  10% {
+    opacity: 1;
+  }
+
+  /* ECG is drawn across the line */
+  28% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+
+  /* disappears after reaching the end */
+  30% {
+    stroke-dashoffset: -80;
+    opacity: 0;
+  }
+
+  /* long quiet period */
+  100% {
+    stroke-dashoffset: -80;
+    opacity: 0;
+  }
+}
 #next-steps {
   display: flex;
   border-top: 1px solid var(--border);
@@ -167,7 +208,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;

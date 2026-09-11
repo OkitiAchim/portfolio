@@ -1,18 +1,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap");
 @import url("https://fonts.cdnfonts.com/css/neue-montreal");
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* =========================================================
+   BASE
+   ========================================================= */
 
 @layer base {
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    border-color: var(--border);
   }
 
   html {
     scroll-behavior: smooth;
+    font-family: "Geist Variable", "DM Sans", sans-serif;
   }
 
   h1,
@@ -24,8 +34,8 @@
   }
 
   body {
-    background-color: #030305;
-    color: #ffffff;
+    background-color: var(--background, #030305);
+    color: var(--foreground, #ffffff);
     font-family: "DM Sans", sans-serif;
     font-size: 16px;
     line-height: 1.6;
@@ -70,7 +80,106 @@
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(99, 102, 241, 0.6);
   }
+
+  /* =========================================================
+     SHADCN / NOVA THEME
+     ========================================================= */
+
+  :root {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+
+    --card: oklch(0.17 0 0);
+    --card-foreground: oklch(0.985 0 0);
+
+    --popover: oklch(0.17 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+
+    --primary: oklch(0.985 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+
+    --secondary: oklch(0.22 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+
+    --muted: oklch(0.22 0 0);
+    --muted-foreground: oklch(0.65 0 0);
+
+    --accent: oklch(0.22 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 12%);
+    --ring: oklch(0.556 0 0);
+
+    --radius: 0.625rem;
+
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+
+    --sidebar: oklch(0.17 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.985 0 0);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-accent: oklch(0.22 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+
+    --card: oklch(0.17 0 0);
+    --card-foreground: oklch(0.985 0 0);
+
+    --popover: oklch(0.17 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+
+    --primary: oklch(0.985 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+
+    --secondary: oklch(0.22 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+
+    --muted: oklch(0.22 0 0);
+    --muted-foreground: oklch(0.65 0 0);
+
+    --accent: oklch(0.22 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 12%);
+    --ring: oklch(0.556 0 0);
+
+    --sidebar: oklch(0.17 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.985 0 0);
+    --sidebar-primary-foreground: oklch(0.205 0 0);
+    --sidebar-accent: oklch(0.22 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: "Geist Variable", sans-serif;
+  }
 }
+
+/* =========================================================
+   CUSTOM PORTFOLIO UTILITIES
+   ========================================================= */
 
 @layer utilities {
   .marquee-track {
@@ -130,7 +239,7 @@
   .glow-cyan {
     box-shadow:
       0 0 30px rgba(6, 182, 212, 0.4),
-      0 0 60px rgba(6, 182, 212, 0.15);
+      0 0 60px rgba(6, 182, 241, 0.15);
   }
 
   .btn-gradient {
@@ -140,9 +249,11 @@
 
   .btn-gradient:hover {
     background: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%);
+
     box-shadow:
       0 0 36px rgba(99, 102, 241, 0.5),
       0 8px 24px rgba(0, 0, 0, 0.3);
+
     transform: translateY(-2px);
   }
 
@@ -156,5 +267,63 @@
     border-color: rgba(255, 255, 255, 0.25);
     background: rgba(255, 255, 255, 0.05);
     transform: translateY(-2px);
+  }
+
+  /* =========================================================
+     ECG HEARTBEAT TRACE
+     ========================================================= */
+
+  .ecg-trace {
+    stroke-dasharray: 1200;
+    stroke-dashoffset: 1200;
+    animation: ecgDraw 10s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.45));
+  }
+
+  @keyframes ecgDraw {
+    /* Quiet line */
+    0% {
+      stroke-dashoffset: 1200;
+      opacity: 0;
+    }
+
+    /* Hold the line before the heartbeat */
+    8% {
+      stroke-dashoffset: 1200;
+      opacity: 0;
+    }
+
+    /* Sudden activation */
+    10% {
+      stroke-dashoffset: 1200;
+      opacity: 1;
+    }
+
+    /* ECG trace draws across the monitor */
+    28% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+
+    /* Pulse leaves the screen */
+    30% {
+      stroke-dashoffset: -100;
+      opacity: 0;
+    }
+
+    /* Remain quiet until the next beat */
+    100% {
+      stroke-dashoffset: -100;
+      opacity: 0;
+    }
+  }
+
+  /* Respect reduced-motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .ecg-trace {
+      animation: none;
+      stroke-dashoffset: 0;
+      opacity: 0.35;
+    }
   }
 }
