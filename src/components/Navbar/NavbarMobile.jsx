@@ -129,15 +129,7 @@ export default function NavbarMobile() {
   return (
     <>
       {/* ── Mobile header ───────────────────────────────────────── */}
-      <motion.header
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{
-          duration: 0.7,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="fixed inset-x-0 top-0 z-[60] px-4 pt-4"
-      >
+      <header className="fixed inset-x-0 top-0 z-[60] px-4 pt-4">
         <div
           className={`
             flex
@@ -242,7 +234,7 @@ export default function NavbarMobile() {
             </span>
           </button>
         </div>
-      </motion.header>
+      </header>
 
       {/* ── Mobile navigation ───────────────────────────────────── */}
       <AnimatePresence>

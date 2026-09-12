@@ -1,5 +1,4 @@
 import { useRef, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 // ─── WebGL shader sources ────────────────────────────────────────────────
@@ -135,35 +134,6 @@ const FRAG_SRC = `
   }
 `;
 
-// ─── Animation ───────────────────────────────────────────────────────────
-const containerVariants = {
-  hidden: {},
-
-  visible: {
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.35,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
-
-  visible: {
-    opacity: 1,
-    y: 0,
-
-    transition: {
-      duration: 0.7,
-      ease: [0.25, 0.46, 0.45, 0.94],
-    },
-  },
-};
-
 // ─── Shader helper ──────────────────────────────────────────────────────
 function mkShader(gl, type, src) {
   const shader = gl.createShader(type);
@@ -189,7 +159,7 @@ export default function HeroMobile({
   secondaryCta = "About me",
 
   onPrimary = () => {
-    document.getElementById("work")?.scrollIntoView({
+    document.getElementById("projects")?.scrollIntoView({
       behavior: "smooth",
     });
   },
@@ -216,17 +186,34 @@ export default function HeroMobile({
     }
 
     const resize = () => {
+      const rect = canvas.getBoundingClientRect();
+
+      if (!rect.width || !rect.height) return;
+
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-      canvas.width = canvas.offsetWidth * dpr;
-      canvas.height = canvas.offsetHeight * dpr;
+      const width = Math.round(rect.width * dpr);
+      const height = Math.round(rect.height * dpr);
 
-      gl.viewport(0, 0, canvas.width, canvas.height);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+
+        gl.viewport(0, 0, width, height);
+      }
     };
+
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+    });
+
+    resizeObserver.observe(canvas);
 
     window.addEventListener("resize", resize);
 
-    resize();
+    requestAnimationFrame(() => {
+      resize();
+    });
 
     // Program
     const prog = gl.createProgram();
@@ -281,6 +268,8 @@ export default function HeroMobile({
 
     return () => {
       cancelAnimationFrame(rafRef.current);
+
+      resizeObserver.disconnect();
 
       window.removeEventListener("resize", resize);
 
@@ -350,7 +339,7 @@ export default function HeroMobile({
       />
 
       {/* ── Main content ───────────────────────────────────────── */}
-      <motion.div
+      <div
         className="
           relative
           z-[10]
@@ -363,13 +352,9 @@ export default function HeroMobile({
           pb-[10vh]
           pt-20
         "
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
       >
         {/* Eyebrow */}
-        <motion.p
-          variants={itemVariants}
+        <p
           className="
             mb-5
             font-dm
@@ -381,11 +366,10 @@ export default function HeroMobile({
           "
         >
           {tagline}
-        </motion.p>
+        </p>
 
         {/* Headline */}
-        <motion.h1
-          variants={itemVariants}
+        <h1
           className="
             mb-5
             w-full
@@ -404,11 +388,10 @@ export default function HeroMobile({
           <span className="text-white/25">Think,</span>
           <br />
           <span className="whitespace-nowrap">Scale &amp; Endure</span>
-        </motion.h1>
+        </h1>
 
         {/* Supporting copy */}
-        <motion.p
-          variants={itemVariants}
+        <p
           className="
             mb-8
             max-w-[330px]
@@ -420,11 +403,10 @@ export default function HeroMobile({
           "
         >
           {subCopy}
-        </motion.p>
+        </p>
 
         {/* CTAs */}
-        <motion.div
-          variants={itemVariants}
+        <div
           className="
             flex
             items-center
@@ -472,23 +454,11 @@ export default function HeroMobile({
 
             <ArrowRight size={14} />
           </button>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* ── Scroll indicator ───────────────────────────────────── */}
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 8,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          delay: 1.2,
-          duration: 0.7,
-        }}
+      <div
         className="
           pointer-events-none
           absolute
@@ -522,7 +492,7 @@ export default function HeroMobile({
         >
           Scroll
         </span>
-      </motion.div>
+      </div>
     </section>
   );
 }

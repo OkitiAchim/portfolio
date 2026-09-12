@@ -254,6 +254,36 @@ export default function ProjectsMobile() {
               03 / —
             </span>
           </div>
+          <div className="relative mt-7 h-10 w-full overflow-hidden">
+            {/* Quiet monitor line */}
+            <div className="absolute top-1/2 left-0 h-px w-full bg-white/10" />
+
+            {/* Moving ECG pulse */}
+            <svg
+              className="absolute inset-0 h-full w-full"
+              viewBox="0 0 1200 40"
+              preserveAspectRatio="none"
+            >
+              <path
+                className="ecg-trace"
+                d="
+                    M -160 20
+                    H -40
+                    H 470
+                    L 482 20
+                    L 490 20
+                    L 499 6
+                    L 508 34
+                    L 517 20
+                    H 1360
+                  "
+                fill="none"
+                stroke="rgba(129, 140, 248, 0.9)"
+                strokeWidth="1.2"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </section>
