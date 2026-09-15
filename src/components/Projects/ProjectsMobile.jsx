@@ -18,9 +18,8 @@ export default function ProjectsMobile() {
       technologies: ["React", "React Leaflet", "Zustand", "Tailwind CSS"],
       image: "/projects/gerd-map.png",
       secondaryImage: "/projects/gerd-details.png",
-      link: "https://geo-risk-dashboard.netlify.app/",
+      link: "",
     },
-
     {
       id: "02",
       shortTitle: "SIMS",
