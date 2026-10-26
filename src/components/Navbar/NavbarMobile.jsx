@@ -1,3 +1,4 @@
+import { scrollToSection } from "../Scroll/controller";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -110,20 +111,14 @@ export default function NavbarMobile() {
 
     if (!element) return;
 
-    element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    scrollToSection(sectionId);
   };
 
   const handleLogoClick = () => {
     setActive(null);
     setMenuOpen(false);
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    scrollToSection("hero", 0);
   };
 
   return (

@@ -1,3 +1,4 @@
+import { scrollToSection } from "../Scroll/controller";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
@@ -38,10 +39,7 @@ export default function NavbarDesktop() {
     const el = document.getElementById(sectionId);
 
     if (el) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+      scrollToSection(sectionId);
     }
   };
 
@@ -110,6 +108,7 @@ export default function NavbarDesktop() {
       "
     >
       <div
+        style={active === "Services" ? { backgroundColor: "rgba(13, 17, 23, 0.90)", borderColor: "rgba(255, 255, 255, 0.14)" } : undefined}
         className={`
           flex
           w-full
@@ -134,10 +133,7 @@ export default function NavbarDesktop() {
           onClick={() => {
             setActive(null);
 
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
+            scrollToSection("hero", 0);
           }}
           className="
             cursor-pointer

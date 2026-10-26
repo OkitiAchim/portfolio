@@ -1,341 +1,60 @@
-import { useRef, useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { useRef, useState } from "react";
 import phoneView from "../../assets/phoneView.png";
+import FlowReveal from "../Flow/FlowReveal";
+import usePhoneStory from "./usePhoneStory";
+import "./about.css";
+
+const values = [
+  { title: "Precision", label: "The foundation", icon: "⌖", description: "Clarity, responsiveness, and intentional structure in every interaction.", detail: "Precision starts with the small decisions: readable type, clear hierarchy, and layouts that work at every size." },
+  { title: "Motion", label: "The feeling", icon: "≈", description: "Subtle movement that creates emotion, direction, and a sense of life.", detail: "Motion guides attention. A considered transition helps people understand what changed, where they are, and what comes next." },
+  { title: "Systems", label: "The long view", icon: "◇", description: "Scalable architecture that stays considered as your product grows.", detail: "A strong system connects the details: reusable components, consistent behavior, and a structure that makes the next idea easier to build." },
+];
 
 export default function About() {
-  const sectionRef = useRef(null);
-
-  /* ─────────────────────────────────────────────
-     MOUSE POSITION
-  ───────────────────────────────────────────── */
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const smoothX = useSpring(mouseX, {
-    stiffness: 90,
-    damping: 22,
-    mass: 0.6,
-  });
-
-  const smoothY = useSpring(mouseY, {
-    stiffness: 90,
-    damping: 22,
-    mass: 0.6,
-  });
-
-  const handleMouseMove = (e) => {
-    const rect = sectionRef.current.getBoundingClientRect();
-
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const tabs = useRef([]);
+  const { story, frame, web, enabled } = usePhoneStory(paused);
+  const handleKeys = (event, index) => {
+    if (!["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? 2 : (index + (["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : 2)) % 3;
+    setActive(next); tabs.current[next]?.focus();
   };
 
-  /* ─────────────────────────────────────────────
-     INTRO ANIMATION
-  ───────────────────────────────────────────── */
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(true);
-    }, 120);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <motion.section
-      id="about"
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      initial={{
-        y: 180,
-        scale: 0.96,
-        opacity: 0,
-        borderTopLeftRadius: "80px",
-        borderTopRightRadius: "80px",
-      }}
-      animate={
-        visible
-          ? {
-              y: 0,
-              scale: 1,
-              opacity: 1,
-              borderTopLeftRadius: "0px",
-              borderTopRightRadius: "0px",
-            }
-          : {}
-      }
-      transition={{
-        duration: 1.4,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="relative min-h-screen overflow-hidden bg-[#f5f5f3] text-black"
-    >
-      {/* ─────────────────────────────────────────
-         GRID OVERLAY
-      ───────────────────────────────────────── */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-60"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* ─────────────────────────────────────────
-         LIQUID RIPPLE — MAIN GLOW
-      ───────────────────────────────────────── */}
-      <motion.div
-        className="absolute pointer-events-none z-[1]"
-        style={{
-          x: smoothX,
-          y: smoothY,
-          width: 420,
-          height: 420,
-          borderRadius: "999px",
-          translateX: "-50%",
-          translateY: "-50%",
-          background:
-            "radial-gradient(circle, rgba(0,0,0,0.10) 0%, rgba(120,120,120,0.08) 35%, rgba(255,255,255,0.02) 65%, transparent 75%)",
-          filter: "blur(50px)",
-          mixBlendMode: "multiply",
-        }}
-      />
-
-      {/* ─────────────────────────────────────────
-         SECONDARY RIPPLE
-      ───────────────────────────────────────── */}
-      <motion.div
-        className="absolute pointer-events-none z-[1]"
-        style={{
-          x: smoothX,
-          y: smoothY,
-          width: 180,
-          height: 180,
-          borderRadius: "999px",
-          translateX: "-50%",
-          translateY: "-50%",
-          background:
-            "radial-gradient(circle, rgba(90,90,90,0.10) 0%, rgba(255,255,255,0.02) 70%, transparent 100%)",
-          filter: "blur(20px)",
-        }}
-        animate={{
-          scale: [1, 1.08, 1],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* ─────────────────────────────────────────
-         TOP SHADOW TRANSITION
-      ───────────────────────────────────────── */}
-      <div
-        className="absolute top-0 left-0 right-0 h-24 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.08), transparent)",
-        }}
-      />
-
-      {/* ─────────────────────────────────────────
-         MAIN CONTENT
-      ───────────────────────────────────────── */}
-      <div className="relative z-10 max-w-7xl mx-auto px-10 py-32">
-        {/* ─────────────────────────────────────
-           HEADING + IMAGE
-        ───────────────────────────────────── */}
-        <div className="grid grid-cols-2 gap-16 items-start mb-20">
-          {/* LEFT — TEXT */}
-          <div className="max-w-3xl">
-            <p className="text-[11px] tracking-[0.35em] uppercase text-black/40 mb-5 font-medium">
-              About &amp; Capabilities
-            </p>
-
-            <h1
-              className="font-syne font-bold tracking-tight leading-[1.02]"
-              style={{
-                fontSize: "3rem",
-              }}
-            >
-              Crafting immersive
-              <br />
-              digital systems
-              <br />
-              with precision.
-            </h1>
-
-            <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
-
-            <p className="mt-10 text-black/60 text-lg leading-relaxed max-w-2xl font-dm">
-              I create immersive frontend experiences and scalable digital
-              systems that combine visual precision, interaction design, and
-              modern web engineering. My work lives at the intersection of
-              creativity, performance, and structure — crafting interfaces that
-              feel fluid, intentional, and deeply human.
-            </p>
-
-            {/* ─────────────────────────────────
-               VALUES / PHILOSOPHY
-            ───────────────────────────────── */}
-            <div className="grid grid-cols-1 gap-5 mt-10">
-              <h1
-                className="font-syne font-bold tracking-tight leading-[1.02]"
-                style={{
-                  fontSize: "3rem",
-                }}
-              >
-                Experiences
-                <br />
-                that feels
-                <br />
-                alive.
-              </h1>
-
-              <div className="mt-8 h-px w-44 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
-
-              <p className="mt-0 text-black/55 leading-relaxed text-lg max-w-xl">
-                Every interaction should feel intentional. Every transition
-                should carry weight. I approach interfaces as living systems —
-                blending motion, rhythm, typography, and engineering into
-                experiences that communicate beyond visuals alone.
-              </p>
-            </div>
+  return <section className="flow-about" aria-labelledby="a-title">
+    <div className="a-story" ref={story} data-sequence-enabled={enabled}>
+      <div className="a-pin"><div className="a-atmosphere" aria-hidden="true" />
+        <div className="a-story-shell">
+          <div className="a-copy"><p className="a-eyebrow">About & capabilities / A closer look</p>
+            <h2 id="a-title">Digital systems.<br /><em>A human touch.</em></h2>
+            <p className="a-intro">I create immersive frontend experiences and scalable digital systems that combine visual precision, interaction design, and modern web engineering.</p>
+            <p className="a-detail">My work lives at the intersection of creativity, performance, and structure. Thoughtful interfaces that feel fluid, intentional, and human.</p>
+            <div className="a-signature"><span aria-hidden="true">a.o</span><div><strong>Achim Okiti</strong><small>Frontend developer & UI engineer</small></div></div>
+            <a href="#services" className="a-link">Explore how I work <span aria-hidden="true">↘</span></a>
           </div>
-
-          {/* RIGHT — IMAGE */}
-          <div className="relative w-full flex justify-end">
-            <motion.div
-              initial={{
-                opacity: 0,
-                x: 250,
-                scale: 0.9,
-              }}
-              whileInView={{
-                opacity: 1,
-                x: 0,
-                scale: 1,
-              }}
-              viewport={{
-                once: false,
-                amount: 0.3,
-              }}
-              transition={{
-                duration: 2.2,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="relative w-full max-w-[480px]"
-            >
-              <img
-                src={phoneView}
-                alt="Phone mockup"
-                className="w-full h-auto"
-              />
-            </motion.div>
+          <div className="a-stage"><div className="a-grid" aria-hidden="true" /><span className="a-stage-label">Form / Function / Feeling</span>
+            {enabled ? <div className="a-live-phone" aria-hidden="true"><div className="a-hardware"><div className="a-screen">
+              <div className="a-status"><span>9:41</span><i /><span>▰ ▰</span></div>
+              <div className="a-web" ref={web}><iframe ref={frame} src={new URLSearchParams(location.search).get("hero") === "preview" ? "/?phone=1&hero=preview" : "/?phone=1"} title="Mobile portfolio preview" tabIndex={-1} scrolling="no" inert /></div>
+              <span className="a-home-indicator" /></div></div></div>
+              : <img className="a-static-phone" src={phoneView} alt="UNBOX portfolio displayed on a mobile phone" width="1017" height="1524" loading="lazy" />}
+            <div className="a-stage-note"><span aria-hidden="true">↗</span><span>{enabled ? <>Scroll a little.<br />See the bigger picture.</> : <>Every detail,<br />intentional.</>}</span></div>
+            <div className="a-caption"><span />{enabled ? "The actual page. A different perspective." : "Clarity at every scale."}</div>
           </div>
-        </div>
-
-        {/* ─────────────────────────────────────────
-           VALUES CARDS
-        ───────────────────────────────────────── */}
-        <div className="grid grid-cols-3 gap-10 mt-24 shadow-sm">
-          {[
-            {
-              title: "Precision",
-              text: "Every interaction is designed with clarity, responsiveness, and intentional structure.",
-            },
-            {
-              title: "Motion",
-              text: "Interfaces should feel alive — subtle movement creates emotion, direction, and immersion.",
-            },
-            {
-              title: "Systems",
-              text: "Beyond visuals, I focus on scalable architecture and sustainable frontend engineering.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="
-                relative
-                overflow-hidden
-                rounded-[28px]
-                border
-                border-black/6
-                bg-white/40
-                backdrop-blur-xl
-                p-8
-                transition-all
-                duration-500
-                ease-out
-                shadow-lg
-                hover:-translate-y-2
-                hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)]
-              "
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-black/[0.02] to-transparent" />
-
-              <div className="relative z-10">
-                <h3 className="font-syne text-2xl font-bold text-black/85">
-                  {item.title}
-                </h3>
-
-                <p className="mt-5 text-black/55 leading-relaxed font-dm">
-                  {item.text}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* ─────────────────────────────────────────
-           BOTTOM CAPTION
-        ───────────────────────────────────────── */}
-        <div
-          onClick={() =>
-            document.getElementById("services")?.scrollIntoView({
-              behavior: "smooth",
-            })
-          }
-          className="
-            mt-28
-            flex
-            flex-col
-            items-center
-            text-center
-            opacity-90
-            cursor-pointer
-            group
-            transition-transform
-            duration-300
-            hover:-translate-y-1
-          "
-        >
-          <div className="w-px h-20 bg-gradient-to-b from-indigo-400/40 via-cyan-400/20 to-transparent mb-6" />
-
-          <p className="text-black/35 uppercase tracking-[0.35em] text-[10px] animate-float-slow">
-            Continue Exploring
-          </p>
-
-          <h3 className="mt-3 mb-1 text-3xl font-syne font-bold text-black/75 tracking-tight group-hover:text-black/90 transition">
-            Designed with intention,built to endure.
-          </h3>
+          {enabled && <div className="a-sequence"><span>{paused ? "Phone motion paused" : "Scroll to explore"}</span><div><span /></div><button type="button" aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? "Play motion ▷" : "Pause motion Ⅱ"}</button><a href="#services">Skip to services ↘</a></div>}
         </div>
       </div>
-
-      {/* ─────────────────────────────────────────
-         BOTTOM FADE
-      ───────────────────────────────────────── */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-28 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(255,255,255,0.95), transparent)",
-        }}
-      />
-    </motion.section>
-  );
+    </div>
+    <div className="a-shell">
+      <FlowReveal className="a-philosophy"><p className="a-eyebrow">The way I think</p><h3>Experiences that <em>feel alive.</em></h3><p>Every interaction should feel intentional. Every transition should carry weight. I blend motion, rhythm, typography, and engineering into experiences that communicate beyond visuals alone.</p></FlowReveal>
+      <FlowReveal className="a-values" role="tablist" aria-label="Explore design values">
+        {values.map((value, index) => <button key={value.title} type="button" role="tab" id={`a-value-${index}`} aria-label={value.title} aria-selected={active === index} aria-controls="a-value-study" tabIndex={active === index ? 0 : -1} ref={(el) => { tabs.current[index] = el; }} onClick={() => setActive(index)} onKeyDown={(e) => handleKeys(e, index)}>
+          <span className="a-value-top"><span>0{index + 1}</span><span aria-hidden="true">{value.icon}</span></span><span className="a-value-title">{value.title}</span><span className="a-value-description">{value.description}</span><span className="a-value-bottom">{value.label}<b aria-hidden="true">↗</b></span>
+        </button>)}
+      </FlowReveal>
+      <div className="a-value-study" role="tabpanel" id="a-value-study" aria-labelledby={`a-value-${active}`}><span>0{active + 1}</span><p>{values[active].detail}</p><small>Select a principle to explore ↑</small></div>
+      <FlowReveal><a href="#services" className="a-bridge"><span>Designed with intention.<br />Built to endure.</span><span aria-hidden="true">↘</span></a></FlowReveal>
+    </div>
+  </section>;
 }

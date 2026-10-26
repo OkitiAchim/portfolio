@@ -1,47 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
-import ContactDesktop from "./ContactDesktop";
-import ContactMobile from "./ContactMobile";
+import ContactView from "./ContactDesktop";
+
+const emptyForm = { name: "", email: "", projectType: "", message: "" };
 
 export default function Contact() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const [status, setStatus] = useState({
-    type: "",
-    message: "",
-  });
-
+  const [form, setForm] = useState(emptyForm);
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [isSending, setIsSending] = useState(false);
 
-  /* HANDLE INPUT CHANGE */
-  const handleChange = (e) => {
-    setForm((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-
-    if (status.message) {
-      setStatus({
-        type: "",
-        message: "",
-      });
-    }
+  useEffect(() => {
+    const selectService = (event) => {
+      const projectType = event.detail?.projectType;
+      if (!["A website", "An interface", "A web application", "Something else"].includes(projectType)) return;
+      setForm((previous) => ({ ...previous, projectType }));
+      setStatus({ type: "", message: "" });
+    };
+    window.addEventListener("portfolio:service-inquiry", selectService);
+    return () => window.removeEventListener("portfolio:service-inquiry", selectService);
+  }, []);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setForm((previous) => ({ ...previous, [name]: value }));
+    if (status.message) setStatus({ type: "", message: "" });
   };
 
-  /* HANDLE FORM SUBMIT */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (isSending) return;
     setIsSending(true);
-    setStatus({
-      type: "",
-      message: "",
-    });
-
+    setStatus({ type: "", message: "" });
     try {
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -49,52 +37,19 @@ export default function Contact() {
         {
           user_name: form.name,
           user_email: form.email,
-          message: form.message,
+          message: `Project type: ${form.projectType}\n\n${form.message}`,
         },
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       );
-
-      setForm({
-        name: "",
-        email: "",
-        message: "",
-      });
-
-      setStatus({
-        type: "success",
-        message: "Message sent successfully.",
-      });
+      setForm(emptyForm);
+      setStatus({ type: "success", message: "Message sent successfully. Thanks for getting in touch." });
     } catch (error) {
       console.error(error);
-
-      setStatus({
-        type: "error",
-        message: "Something went wrong. Please try again.",
-      });
+      setStatus({ type: "error", message: "Your message could not be sent. Please try again or use the email link below." });
     } finally {
       setIsSending(false);
     }
   };
 
-  const contactProps = {
-    form,
-    handleChange,
-    handleSubmit,
-    status,
-    isSending,
-  };
-
-  return (
-    <>
-      {/* DESKTOP */}
-      <div className="hidden lg:block">
-        <ContactDesktop {...contactProps} />
-      </div>
-
-      {/* MOBILE + TABLET */}
-      <div className="block lg:hidden">
-        <ContactMobile {...contactProps} />
-      </div>
-    </>
-  );
+  return <ContactView form={form} handleChange={handleChange} handleSubmit={handleSubmit} status={status} isSending={isSending} />;
 }

@@ -1,18 +1,15 @@
+import { useSyncExternalStore } from "react";
 import HeroDesktop from "./HeroDesktop";
 import HeroMobile from "./HeroMobile";
 
-const Hero = () => {
-  return (
-    <>
-      <div className="hidden lg:block">
-        <HeroDesktop />
-      </div>
-
-      <div className="block lg:hidden">
-        <HeroMobile />
-      </div>
-    </>
-  );
+const subscribe = (notify) => {
+  const desktop = matchMedia("(min-width:1024px)");
+  desktop.addEventListener("change", notify);
+  return () => desktop.removeEventListener("change", notify);
 };
+const isDesktop = () => matchMedia("(min-width:1024px)").matches;
 
-export default Hero;
+export default function Hero() {
+  const desktop = useSyncExternalStore(subscribe, isDesktop, () => false);
+  return desktop ? <HeroDesktop preview /> : <HeroMobile preview />;
+}

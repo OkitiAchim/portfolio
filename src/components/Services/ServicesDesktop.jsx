@@ -1,230 +1,117 @@
-import { motion, useMotionValue, useSpring, useInView } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import FlowReveal from "../Flow/FlowReveal";
+import "./services.css";
+import "./service-panels.css";
+import "./services-light.css";
+import "./service-glass.css";
 
-export default function ServicesDesktop() {
-  const sectionRef = useRef(null);
+const services = [
+  {
+    title: "Website Development", lines: ["Website", "Development"], chapter: "01 / Build",
+    description: "High-performance websites built around your brand, your audience, and your goals.",
+    skills: ["React", "TypeScript", "Next.js"],
+    kicker: "Website development / The deliverables", heading: ["Good on the surface.", "Solid underneath."],
+    items: ["Responsive layouts, from phone to desktop", "Reusable components and scalable structure", "Thoughtful interactions and clear navigation"],
+    cta: "Let’s build your website", projectType: "A website",
+  },
+  {
+    title: "Modern Web Design", lines: ["Modern", "Web Design"], chapter: "02 / Shape",
+    description: "Refined interfaces with visual clarity, smooth interaction, and a distinctive point of view.",
+    skills: ["UI systems", "Motion", "Responsive"],
+    kicker: "Modern web design / The deliverables", heading: ["A clear point of view.", "A natural way through."],
+    items: ["Visual hierarchy, typography, and layout", "Consistent interface components and states", "Purposeful motion and responsive interaction"],
+    cta: "Let’s shape your interface", projectType: "An interface",
+  },
+  {
+    title: "Build & Deployment", lines: ["Build &", "Deployment"], chapter: "03 / Launch",
+    description: "A considered launch, with performance, accessibility, and the details that make it last.",
+    skills: ["Git", "Web Vitals", "Vercel"],
+    kicker: "Build & deployment / The deliverables", heading: ["The final details.", "The first impression."],
+    items: ["Performance and accessibility checks", "A version-controlled deployment workflow", "A polished handoff, ready for real visitors"],
+    cta: "Let’s plan your launch", projectType: "Something else",
+  },
+];
 
-  /* ─────────────────────────────
-     FIX: better trigger threshold
-  ───────────────────────────── */
-  const isInView = useInView(sectionRef, {
-    amount: 0.5, // ✅ FIXED (was 1)
-    once: false,
-  });
+function ServiceVisual({ active }) {
+  return (
+    <div className="svc-service-visual" data-scene={active} aria-hidden="true">
+      <div className="svc-visual-caption"><span>The details make the difference</span><span>0{active + 1} / 03</span></div>
+      <div className="svc-visual-scene svc-scene-development">
+        <div className="svc-wire-browser"><div className="svc-wire-top"><i /><i /><i /><span>Your next website</span></div>
+          <div className="svc-wire-nav"><strong>Brand.</strong><span /><span /><b>↗</b></div>
+          <div className="svc-wire-hero"><span>Something<br /><em>worth exploring.</em></span><i /></div>
+          <div className="svc-wire-body"><i /><i /><i /></div>
+        </div>
+        <div className="svc-wire-phone"><span /><div>Made<br /><em>for every<br />screen.</em></div><b>↗</b></div>
+        <div className="svc-responsive-caption"><i />One experience. Every screen.</div>
+      </div>
+      <div className="svc-visual-scene svc-scene-design">
+        <div className="svc-type-study"><small>Hierarchy / Rhythm / Character</small><span>Aa<span>↗</span></span><div><i /><i /><i /><i /><i /></div></div>
+        <div className="svc-interaction-study"><span>A detail worth feeling.</span><div><span>Explore</span><b>↗</b></div></div>
+      </div>
+      <div className="svc-visual-scene svc-scene-launch">
+        <div className="svc-launch-orbit"><svg viewBox="0 0 400 240"><path d="M40 160 C100 160 75 80 150 80 S210 160 270 130 S300 45 365 45" /><circle cx="40" cy="160" r="8" /><circle cx="150" cy="80" r="8" /><circle cx="270" cy="130" r="8" /><circle cx="365" cy="45" r="8" /></svg>
+          <span className="svc-launch-label svc-l1">Refine</span><span className="svc-launch-label svc-l2">Check</span><span className="svc-launch-label svc-l3">Deploy</span><span className="svc-launch-label svc-l4">Live ↗</span>
+        </div>
+        <div className="svc-launch-caption"><span className="svc-launch-indicator" />Every detail, ready for the real world.</div>
+      </div>
+    </div>
+  );
+}
 
-  /* ─────────────────────────────
-     CURSOR GLOW
-  ───────────────────────────── */
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+export default function Services() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const tabs = useRef([]);
+  const selected = services[active];
 
-  const smoothX = useSpring(mouseX, {
-    stiffness: 90,
-    damping: 25,
-    mass: 0.8,
-  });
-
-  const smoothY = useSpring(mouseY, {
-    stiffness: 90,
-    damping: 25,
-    mass: 0.8,
-  });
-
-  const handleMouseMove = (e) => {
-    const rect = sectionRef.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
+  const handleKeys = (event, index) => {
+    if (!["ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? services.length - 1
+      : (index + (["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : services.length - 1)) % services.length;
+    setActive(next);
+    tabs.current[next]?.focus();
   };
 
-  const services = [
-    {
-      title: "Website Development",
-      skills: ["React", "JavaScript", "TypeScript", "Next.js", "Tailwind CSS"],
-      text: "I design and develop structured, high-performance websites tailored to your brand and objectives. Each build is engineered with scalable architecture, reusable components, and a focus on long-term maintainability.",
-    },
-    {
-      title: "Modern Web Design",
-      skills: ["Framer Motion", "CSS", "UI Systems", "Responsive Design"],
-      text: "I create refined, user-centered interfaces that balance clarity, usability, and visual hierarchy. Every experience is designed with smooth interaction patterns and consistent behavior across all devices.",
-    },
-    {
-      title: "Build & Deployment",
-      skills: ["Git", "GitHub", "SEO", "Web Vitals", "Vercel"],
-      text: "I optimize and deploy production-ready applications focused on speed, accessibility, and search performance. Each project is version-controlled and deployed with reliable, CI-ready workflows.",
-    },
-  ];
+  const selectBrief = () => {
+    window.dispatchEvent(new CustomEvent("portfolio:service-inquiry", { detail: { projectType: selected.projectType } }));
+  };
 
-  /* ─────────────────────────────
-     VARIANTS (UNCHANGED LOGIC)
-  ───────────────────────────── */
-  const cardVariants = {
-    stacked: (i) => ({
-      x: 0,
-      y: i * 22,
-      rotate: i === 0 ? -5 : i === 2 ? 5 : 0,
-      scale: 1,
-      zIndex: 10 - i,
-    }),
-
-    expanded: (i) => ({
-      x: (i - 1) * 380,
-      y: 0,
-      rotate: 0,
-      scale: 1,
-      zIndex: 20,
-    }),
+  const moveGlass = (event) => {
+    const card = event.currentTarget;
+    const bounds = card.getBoundingClientRect();
+    card.style.setProperty("--glass-x", `${((event.clientX - bounds.left) / bounds.width) * 100}%`);
+    card.style.setProperty("--glass-y", `${((event.clientY - bounds.top) / bounds.height) * 100}%`);
+  };
+  const resetGlass = (event) => {
+    event.currentTarget.style.removeProperty("--glass-x");
+    event.currentTarget.style.removeProperty("--glass-y");
   };
 
   return (
-    <section
-      id="services"
-      ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      className="relative min-h-screen overflow-hidden bg-black text-white"
-    >
-      {/* GRID */}
-      <div
-        className="absolute inset-0 opacity-40 pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* CURSOR */}
-      <motion.div
-        className="absolute pointer-events-none z-[1]"
-        style={{
-          x: smoothX,
-          y: smoothY,
-          width: 420,
-          height: 420,
-          borderRadius: "999px",
-          translateX: "-50%",
-          translateY: "-50%",
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.18) 0%, rgba(6,182,212,0.08) 45%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-
-      {/* CONTENT */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-32">
-        {/* HEADER */}
-        <div className="max-w-3xl mb-4">
-          <p className="text-[11px] tracking-[0.35em] uppercase text-white/40 mb-5">
-            Web Development Services
-          </p>
-
-          <h1
-            className="font-syne font-bold leading-[1.02]"
-            style={{ fontSize: "clamp(3rem, 6vw, 3rem)" }}
-          >
-            Your vision,
-            <br />
-            brought online.
-          </h1>
-
-          <p className="mt-10 text-white/55 text-lg max-w-2xl">
-            Need a website for your business, portfolio, or product? I handle
-            the entire process from design to development,creating polished,
-            responsive experiences that help you present your brand with
-            confidence.
-          </p>
-        </div>
-
-        {/*DESKTOP ANIMATION SYSTEM */}
-        <div className="hidden md:flex relative h-[420px] items-center justify-center">
-          {services.map((service, i) => (
-            <motion.div
-              key={i}
-              custom={i}
-              variants={cardVariants}
-              initial="stacked"
-              animate={isInView ? "expanded" : "stacked"}
-              transition={{
-                type: "spring",
-                stiffness: 50,
-                damping: 18,
-                mass: 1.2,
-              }}
-              className="absolute w-[360px]"
-            >
-              <div className="group relative overflow-hidden rounded-[28px] border border-white/5 bg-white/[0.03] backdrop-blur-md p-8 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0.5,0.8,0.1)] transition-all duration-500">
-                <h2 className="font-syne text-2xl font-bold text-white/90">
-                  {service.title}
-                </h2>
-
-                <p className="mt-5 text-white/50 text-left leading-8">
-                  {service.text}
-                </p>
-
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {service.skills.map((skill, idx) => (
-                    <span
-                      key={idx}
-                      className="text-[11px] px-3 py-1 rounded-full border border-white/10 text-white/60"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/*MOBILE STATIC SYSTEM*/}
-        <div className="md:hidden mt-16 space-y-6">
-          {services.map((service, i) => (
-            <div
-              key={i}
-              className="relative overflow-hidden rounded-[28px] border border-white/5 bg-white/[0.03] backdrop-blur-md p-8"
-            >
-              <h2 className="font-syne text-2xl font-bold text-white/90">
-                {service.title}
-              </h2>
-
-              <p className="mt-5 text-white/50 text-left leading-8">
-                {service.text}
-              </p>
-
-              <div className="mt-6 flex flex-wrap gap-2">
-                {service.skills.map((skill, idx) => (
-                  <span
-                    key={idx}
-                    className="text-[11px] px-3 py-1 rounded-full border border-white/10 text-white/60"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* bottom caption */}
-        <div
-          onClick={() =>
-            document.getElementById("projects")?.scrollIntoView({
-              behavior: "smooth",
-            })
-          }
-          className="mt-20 flex flex-col items-center text-center opacity-90 cursor-pointer group transition-transform duration-300 hover:-translate-y-1"
-        >
-          {/* vertical accent line */}
-          <div className="w-px h-20 bg-gradient-to-b from-indigo-400/40 via-cyan-400/20 to-transparent mb-6" />
-
-          {/* small label */}
-          <p className="text-white uppercase tracking-[0.35em] text-[10px] animate-float-slow">
-            Continue Exploring
-          </p>
-
-          {/* main line */}
-          <h3 className="mt-3  text-xl lg:text-3xl font-syne font-bold text-white tracking-tight group-hover:text-slate-300 transition">
-            See ideas come to life
-          </h3>
-        </div>
+    <section className="flow-services" data-motion-paused={paused} aria-labelledby="svc-title">
+      <div className="svc-shell">
+        <div className="svc-chapter"><span>Web development services</span><button type="button" className="svc-motion-toggle" aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? "Play illustrations" : "Pause illustrations"}<span aria-hidden="true">{paused ? "▷" : "Ⅱ"}</span></button></div>
+        <FlowReveal className="svc-services-intro"><h2 id="svc-title">Your vision,<br /><em>brought online.</em></h2><p>A website for your business, portfolio, or product. I connect design and development to create polished, responsive experiences that help your brand speak with confidence.</p></FlowReveal>
+        <FlowReveal className="svc-service-cards" role="tablist" aria-label="Explore services">
+          {services.map((service, index) => <button key={service.title} ref={(element) => { tabs.current[index] = element; }}
+            type="button" role="tab" id={`svc-tab-${index}`} aria-label={service.title} aria-selected={active === index}
+            aria-controls="svc-detail" tabIndex={active === index ? 0 : -1} onClick={() => setActive(index)} onKeyDown={(event) => handleKeys(event, index)} onPointerMove={moveGlass} onPointerLeave={resetGlass}>
+            <span className="svc-service-top"><span>{service.chapter}</span><span aria-hidden="true">↗</span></span>
+            <span className="svc-service-title">{service.lines[0]}<br />{service.lines[1]}</span>
+            <span className="svc-service-description">{service.description}</span>
+            <span className="svc-tech-list">{service.skills.map((skill) => <span key={skill}>{skill}</span>)}</span>
+            <span className="svc-service-bottom">What’s included <b aria-hidden="true">{active === index ? "−" : "+"}</b></span>
+          </button>)}
+        </FlowReveal>
+        <FlowReveal className="svc-service-detail" id="svc-detail" role="tabpanel" aria-labelledby={`svc-tab-${active}`}>
+          <div className="svc-detail-copy" key={active}><p className="svc-eyebrow">{selected.kicker}</p><h3>{selected.heading[0]}<br />{selected.heading[1]}</h3><ul>{selected.items.map((item) => <li key={item}>{item}</li>)}</ul>
+            <a href="#contact" className="svc-quiet-link" onClick={selectBrief}>{selected.cta}<span aria-hidden="true">↗</span></a>
+          </div>
+          <ServiceVisual active={active} />
+        </FlowReveal>
+        <FlowReveal className="svc-services-exit"><div><p className="svc-eyebrow">From possibility to proof</p><h3>See ideas <em>come to life.</em></h3></div><a href="#projects" aria-label="Continue to selected work"><span aria-hidden="true">↘</span></a></FlowReveal>
       </div>
     </section>
   );

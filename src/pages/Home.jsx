@@ -1,3 +1,4 @@
+import SmoothScroll from "../components/Scroll/SmoothScroll";
 import { useEffect } from "react";
 
 import Navbar from "../components/Navbar";
@@ -14,6 +15,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#030305]">
+      <SmoothScroll />
       <Navbar />
 
       <section id="hero">

@@ -1,314 +1,86 @@
-import { useRef, useEffect } from "react";
+import { useState } from "react";
+import FlowReveal from "../Flow/FlowReveal";
+import FlowDialog from "../Flow/FlowDialog";
+import "../Flow/flow.css";
+
+const projects = [
+  {
+    id: "01", name: "ERIP", category: "Geospatial intelligence", location: "Akure South",
+    title: "Environmental Risk Intelligence Platform",
+    titleLines: ["Environmental Risk", "Intelligence Platform"],
+    description: "Making complex environmental data navigable. An interactive map for exploring flood susceptibility, population exposure, and the evidence behind every layer.",
+    detail: "Environmental intelligence for Akure South, combining flood susceptibility screening with population exposure, land cover, rainfall, and terrain layers. Location profiles connect the map to supporting evidence, while the data sources view explains methods, attribution, and known limitations.",
+    image: "/projects/erip_map.png", secondaryImage: "/projects/erip_details.png",
+    imageAlt: "ERIP environmental risk map and location profile for Akure South",
+    secondaryAlt: "ERIP data sources showing methods, attribution, and limitations",
+    detailLabel: "The evidence behind the map",
+  },
+  {
+    id: "02", name: "SIMS", category: "Digital systems", location: "Administration, simplified",
+    title: "Student Information Management System",
+    titleLines: ["Student Information", "Management System"],
+    description: "One clear workspace for the moving parts of a school. Student records, attendance, finance, and everyday administration, brought together.",
+    detail: "A unified workspace for student records, attendance, finance, timetables, notifications, and administrative workflows. The dashboard brings key information into focus, with detailed views for the tasks behind the numbers.",
+    image: "/projects/sims-dashboard.png", secondaryImage: "/projects/sims-students.png",
+    imageAlt: "SIMS student information and administration dashboard",
+    secondaryAlt: "SIMS detailed student administration interface",
+    detailLabel: "The details behind the dashboard",
+  },
+];
+
+function handleTilt(event) {
+  if (document.documentElement.classList.contains("portfolio-scrolling") || event.pointerType !== "mouse" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rect = event.currentTarget.getBoundingClientRect();
+  event.currentTarget.style.setProperty("--flow-tilt-x", `${-((event.clientY - rect.top) / rect.height - 0.5) * 2.5}deg`);
+  event.currentTarget.style.setProperty("--flow-tilt-y", `${((event.clientX - rect.left) / rect.width - 0.5) * 2.5}deg`);
+}
+
+function resetTilt(event) {
+  event.currentTarget.style.setProperty("--flow-tilt-x", "0deg");
+  event.currentTarget.style.setProperty("--flow-tilt-y", "0deg");
+}
 
 export default function Projects() {
-  const sectionRef = useRef(null);
-  const glowRef = useRef(null);
-  const rafRef = useRef(null);
-
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const glowPosRef = useRef({ x: 0, y: 0 });
-
-  const projects = [
-    {
-      id: "01",
-      shortTitle: "GERD",
-      title: "Geospatial Environmental Risk Dashboard",
-      description:
-        "An interactive dashboard for exploring environmental risk through geospatial data, map-based visualization, and contextual environmental indicators.",
-      technologies: ["React", "React Leaflet", "Zustand", "Tailwind CSS"],
-      image: "/projects/gerd-map.png",
-      secondaryImage: "/projects/gerd-details.png",
-      link: "",
-    },
-
-    {
-      id: "02",
-      shortTitle: "SIMS",
-      title: "Student Information Management System",
-      description:
-        "A management dashboard for student records, attendance, finance, timetables, notifications, and administrative workflows.",
-      technologies: ["React", "TypeScript", "Redux", "Material UI"],
-      image: "/projects/sims-dashboard.png",
-      secondaryImage: "/projects/sims-students.png",
-      link: "",
-    },
-  ];
-
-  /* ───────────────── POINTER GLOW ───────────────── */
-
-  useEffect(() => {
-    const section = sectionRef.current;
-
-    if (!section) return;
-
-    const lerp = (a, b, t) => a + (b - a) * t;
-
-    const animate = () => {
-      glowPosRef.current.x = lerp(
-        glowPosRef.current.x,
-        mouseRef.current.x,
-        0.08,
-      );
-
-      glowPosRef.current.y = lerp(
-        glowPosRef.current.y,
-        mouseRef.current.y,
-        0.08,
-      );
-
-      if (glowRef.current) {
-        glowRef.current.style.left = `${glowPosRef.current.x}px`;
-        glowRef.current.style.top = `${glowPosRef.current.y}px`;
-      }
-
-      rafRef.current = requestAnimationFrame(animate);
-    };
-
-    const handleMouseMove = (e) => {
-      const rect = section.getBoundingClientRect();
-
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
-    };
-
-    const handleLeave = () => {
-      const rect = section.getBoundingClientRect();
-
-      mouseRef.current = {
-        x: rect.width / 2,
-        y: rect.height / 2,
-      };
-    };
-
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseleave", handleLeave);
-
-    rafRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseleave", handleLeave);
-      cancelAnimationFrame(rafRef.current);
-    };
-  }, []);
+  const [selected, setSelected] = useState(null);
+  const [tickerPaused, setTickerPaused] = useState(false);
 
   return (
-    <section
-      id="work"
-      ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden bg-[#000000] text-white"
-    >
-      {/* ── POINTER GLOW ── */}
-      <div
-        ref={glowRef}
-        className="pointer-events-none absolute z-0"
-        style={{
-          width: "500px",
-          height: "500px",
-          borderRadius: "50%",
-          transform: "translate(-50%, -50%)",
-          background:
-            "radial-gradient(circle, rgba(99,102,241,0.18), rgba(6,182,212,0.10), transparent 70%)",
-          willChange: "left, top",
-        }}
-      />
-
-      {/* ── AMBIENT BACKGROUND GLOW ── */}
-      <div className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute left-1/2 top-[-10%] h-[500px] w-[900px] -translate-x-1/2 blur-3xl opacity-40"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(99,102,241,0.18), rgba(6,182,212,0.10), rgba(168,85,247,0.08), transparent 75%)",
-          }}
-        />
+    <section id="work" className={`flow-work ${tickerPaused ? "flow-ticker-paused" : ""}`} aria-labelledby="flow-work-title">
+      <div className="flow-marquee" aria-hidden="true"><div>{[0, 1].map((n) => <span key={n}>Idea <b>↗</b> Interaction <b>↗</b> Impact <b>↗</b> </span>)}</div></div>
+      <div className="flow-work-content">
+        <div className="flow-chapter"><span>Selected work / 02 projects</span><button className="flow-motion-toggle" type="button" aria-pressed={tickerPaused} onClick={() => setTickerPaused(!tickerPaused)}>{tickerPaused ? "Play animated text" : "Pause animated text"}<span aria-hidden="true">{tickerPaused ? "▷" : "Ⅱ"}</span></button></div>
+        <FlowReveal className="flow-work-heading">
+          <h2 id="flow-work-title">Less talk.<br /><em>More impact.</em></h2>
+          <p>Real problems.<br />Considered solutions.<br />A little unexpected delight.</p>
+        </FlowReveal>
+        {projects.map((project, index) => (
+          <FlowReveal as="article" key={project.id} className={`flow-project ${index === 1 ? "flow-project-offset" : ""}`}>
+            <button type="button" className="flow-project-visual" onClick={() => setSelected(project)}
+              onPointerMove={handleTilt} onPointerLeave={resetTilt} onPointerCancel={resetTilt}
+              aria-label={`Explore ${project.title}`} aria-haspopup="dialog">
+              <span className="flow-browser-strip"><span aria-hidden="true">● ● ●</span><span>{project.name} / {project.location}</span><span aria-hidden="true">↗</span></span>
+              <span className="flow-image-wrap"><img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
+                <span className="flow-project-open">Explore project <span aria-hidden="true">↗</span></span>
+              </span>
+            </button>
+            <div className="flow-project-info">
+              <div><p className="flow-eyebrow">{project.id} / {project.category}</p><h3>{project.titleLines[0]}<br />{project.titleLines[1]}</h3></div>
+              <div><p className="flow-project-description">{project.description}</p><button type="button" className="flow-text-link" onClick={() => setSelected(project)} aria-label={`A closer look at ${project.title}`} aria-haspopup="dialog">A closer look <span aria-hidden="true">↗</span></button></div>
+            </div>
+          </FlowReveal>
+        ))}
+        <FlowReveal className="flow-work-outro"><span>The next project<br />could be yours.</span><a href="#contact" aria-label="Start your project"><span aria-hidden="true">↘</span></a></FlowReveal>
       </div>
-
-      {/* ── GRID ── */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-30"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-
-      {/* ── CONTENT ── */}
-      <div className="relative z-10 mx-auto max-w-7xl px-10 py-32">
-        {/* ── HEADER ── */}
-        <div className="mb-24 max-w-3xl">
-          <p className="mb-5 text-[9px] uppercase tracking-[0.35em] text-indigo-300/70">
-            Work & Experiences
-          </p>
-
-          <h1
-            className="font-syne font-bold leading-[1.05] tracking-tight"
-            style={{ fontSize: "clamp(2.4rem, 5vw, 3rem)" }}
-          >
-            Selected Work
-          </h1>
-
-          <div className="mt-8 h-px w-40 bg-gradient-to-r from-indigo-500/60 via-cyan-400/70 to-purple-500/40" />
-
-          <p className="mt-10 max-w-2xl text-lg leading-relaxed text-white/55">
-            A selection of interfaces, systems, and research-driven projects
-            built around thoughtful interaction, visual clarity, and practical
-            problem solving.
-          </p>
-        </div>
-
-        {/* ── PROJECTS ── */}
-        <div className="space-y-32">
-          {projects.map((project, index) => (
-            <article key={project.id} className="group relative">
-              {/* ── PROJECT VISUAL ── */}
-              <div className="relative overflow-hidden border border-white/10 bg-white/[0.025]">
-                {/* Main image */}
-                <div className="relative aspect-[16/8] overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={`${project.title} interface`}
-                    className="h-full w-full object-cover object-center transition duration-700 ease-out group-hover:scale-[1.015]"
-                  />
-
-                  {/* Image overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                  {/* Project number */}
-                  <div className="absolute left-8 top-8">
-                    <span className="font-syne text-sm tracking-[0.25em] text-white/50">
-                      {project.id}
-                    </span>
-                  </div>
-
-                  {/* Secondary screenshot */}
-                  {project.secondaryImage && (
-                    <div
-                      className={`absolute bottom-8 ${
-                        index % 2 === 0 ? "right-8" : "left-8"
-                      } w-[34%] overflow-hidden border border-white/15 bg-[#080b12]/90 shadow-2xl transition duration-700 ease-out group-hover:translate-y-[-6px]`}
-                    >
-                      <img
-                        src={project.secondaryImage}
-                        alt={`${project.title} detail view`}
-                        className="h-auto w-full object-cover"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* ── PROJECT INFORMATION ── */}
-              <div className="mt-8 flex items-start justify-between gap-16">
-                <div className="max-w-3xl">
-                  <div className="mb-3 flex items-center gap-4">
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-indigo-300/60">
-                      {project.id}
-                    </span>
-
-                    <span className="h-px w-8 bg-white/10" />
-
-                    <span className="text-[10px] uppercase tracking-[0.3em] text-white/35">
-                      {project.shortTitle}
-                    </span>
-                  </div>
-
-                  <h2 className="font-syne text-4xl font-bold leading-tight tracking-tight text-white/95">
-                    {project.title}
-                  </h2>
-
-                  <p className="mt-5 max-w-2xl text-[15px] leading-7 text-white/50">
-                    {project.description}
-                  </p>
-
-                  {/* Technologies */}
-                  <div className="mt-7 flex gap-3">
-                    {project.technologies.map((technology) => (
-                      <span
-                        key={technology}
-                        className="border border-white/10 bg-white/[0.025] px-3 py-1.5 text-[10px] uppercase tracking-[0.16em] text-white/45"
-                      >
-                        {technology}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* ── PROJECT ACTION ── */}
-                <div className="pt-2">
-                  {project.link ? (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group/link flex items-center gap-4 whitespace-nowrap text-[11px] uppercase tracking-[0.25em] text-white/55 transition duration-300 hover:text-white"
-                    >
-                      <span>Explore Project</span>
-
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 transition duration-300 group-hover/link:border-indigo-400/40 group-hover/link:bg-indigo-500/10">
-                        ↗
-                      </span>
-                    </a>
-                  ) : (
-                    <span className="flex items-center gap-4 whitespace-nowrap text-[11px] uppercase tracking-[0.25em] text-white/20">
-                      <span>Project Preview</span>
-
-                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/5">
-                        →
-                      </span>
-                    </span>
-                  )}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* ── FUTURE PROJECT SPACE ── */}
-        <div className="relative mt-24 overflow-hidden">
-          <div className="flex items-end justify-between">
-            <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">
-              More work in progress
-            </p>
-
-            <span className="font-mono text-xs text-white/20">03</span>
-          </div>
-
-          <div className="relative mt-7 h-10 w-full overflow-hidden">
-            {/* Quiet monitor line */}
-            <div className="absolute top-1/2 left-0 h-px w-full bg-white/10" />
-
-            {/* Moving ECG pulse */}
-            <svg
-              className="absolute inset-0 h-full w-full"
-              viewBox="0 0 1200 40"
-              preserveAspectRatio="none"
-            >
-              <path
-                className="ecg-trace"
-                d="
-                    M -160 20
-                    H -40
-                    H 470
-                    L 482 20
-                    L 490 20
-                    L 499 6
-                    L 508 34
-                    L 517 20
-                    H 1360
-                  "
-                fill="none"
-                stroke="rgba(129, 140, 248, 0.9)"
-                strokeWidth="1.2"
-                vectorEffect="non-scaling-stroke"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
+      <FlowDialog open={Boolean(selected)} onClose={() => setSelected(null)} titleId="flow-project-title" label="A closer look / Selected work">
+        {selected && <>
+          <p className="flow-eyebrow">{selected.category} / {selected.name}</p>
+          <h2 id="flow-project-title">{selected.title}</h2><p className="flow-dialog-description">{selected.detail}</p>
+          <img className="flow-dialog-image" src={selected.image} alt={selected.imageAlt} />
+          <p className="flow-eyebrow">Interface detail / {selected.detailLabel}</p>
+          <img className="flow-dialog-image" src={selected.secondaryImage} alt={selected.secondaryAlt} loading="lazy" />
+          <a className="flow-text-link" href="#contact" onClick={() => setSelected(null)}>Have something in mind? <span aria-hidden="true">↗</span></a>
+        </>}
+      </FlowDialog>
     </section>
   );
 }

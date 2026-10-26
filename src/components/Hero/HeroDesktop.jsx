@@ -1,3 +1,6 @@
+import visibleCanvas from "./visibleCanvas";
+import HeroRemodel from "./HeroRemodel";
+import { scrollToSection } from "../Scroll/controller";
 import { useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -206,6 +209,7 @@ function mkShader(gl, type, src) {
 
 // ─── Desktop Hero ────────────────────────────────────────────────────────
 export default function HeroDesktop({
+  preview = false,
   tagline = "Frontend Developer & UI Engineer",
 
   subCopy = "Crafting high-performance web applications, geospatial platforms, and AI-powered experiences.",
@@ -215,15 +219,11 @@ export default function HeroDesktop({
   secondaryCta = "About me",
 
   onPrimary = () => {
-    document.getElementById("projects")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    scrollToSection("projects");
   },
 
   onSecondary = () => {
-    document.getElementById("about")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    scrollToSection("about");
   },
 }) {
   const canvasRef = useRef(null);
@@ -232,9 +232,7 @@ export default function HeroDesktop({
     y: 0,
   });
 
-  const rafRef = useRef(null);
-
-  const initWebGL = useCallback(() => {
+const initWebGL = useCallback(() => {
     const canvas = canvasRef.current;
 
     if (!canvas) return;
@@ -305,7 +303,7 @@ export default function HeroDesktop({
     // ── Animation ───────────────────────────────────────────────
     const start = performance.now();
 
-    const tick = () => {
+    const stopRendering = visibleCanvas(canvas, () => {
       const t = (performance.now() - start) / 1000;
 
       gl.uniform1f(uTime, t);
@@ -320,11 +318,7 @@ export default function HeroDesktop({
       );
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
+    });
 
     // ── Mouse tracking ──────────────────────────────────────────
     const section = canvas.closest("section") || canvas.parentElement;
@@ -342,7 +336,7 @@ export default function HeroDesktop({
 
     // ── Cleanup ─────────────────────────────────────────────────
     return () => {
-      cancelAnimationFrame(rafRef.current);
+      stopRendering();
 
       window.removeEventListener("resize", resize);
 
@@ -358,6 +352,8 @@ export default function HeroDesktop({
 
     return cleanup;
   }, [initWebGL]);
+
+  if (preview) return <HeroRemodel canvasRef={canvasRef} />;
 
   return (
     <section

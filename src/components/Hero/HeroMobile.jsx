@@ -1,3 +1,6 @@
+import visibleCanvas from "./visibleCanvas";
+import HeroRemodel from "./HeroRemodel";
+import { scrollToSection } from "../Scroll/controller";
 import { useRef, useEffect, useCallback } from "react";
 import { ArrowRight } from "lucide-react";
 
@@ -150,6 +153,7 @@ function mkShader(gl, type, src) {
 
 // ─── Mobile Hero ─────────────────────────────────────────────────────────
 export default function HeroMobile({
+  preview = false,
   tagline = "Frontend Developer & UI Engineer",
 
   subCopy = "Crafting high-performance web applications, geospatial platforms, and AI-powered experiences.",
@@ -159,21 +163,15 @@ export default function HeroMobile({
   secondaryCta = "About me",
 
   onPrimary = () => {
-    document.getElementById("projects")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    scrollToSection("projects");
   },
 
   onSecondary = () => {
-    document.getElementById("about")?.scrollIntoView({
-      behavior: "smooth",
-    });
+    scrollToSection("about");
   },
 }) {
   const canvasRef = useRef(null);
-  const rafRef = useRef(null);
-
-  const initWebGL = useCallback(() => {
+const initWebGL = useCallback(() => {
     const canvas = canvasRef.current;
 
     if (!canvas) return;
@@ -211,9 +209,7 @@ export default function HeroMobile({
 
     window.addEventListener("resize", resize);
 
-    requestAnimationFrame(() => {
-      resize();
-    });
+    const initialResize = requestAnimationFrame(resize);
 
     // Program
     const prog = gl.createProgram();
@@ -252,7 +248,7 @@ export default function HeroMobile({
 
     const start = performance.now();
 
-    const tick = () => {
+    const stopRendering = visibleCanvas(canvas, () => {
       const time = (performance.now() - start) / 1000;
 
       gl.uniform1f(uTime, time);
@@ -260,15 +256,12 @@ export default function HeroMobile({
       gl.uniform2f(uRes, canvas.width, canvas.height);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-
-    rafRef.current = requestAnimationFrame(tick);
+    });
 
     return () => {
-      cancelAnimationFrame(rafRef.current);
+      stopRendering();
 
+      cancelAnimationFrame(initialResize);
       resizeObserver.disconnect();
 
       window.removeEventListener("resize", resize);
@@ -283,6 +276,8 @@ export default function HeroMobile({
 
     return cleanup;
   }, [initWebGL]);
+
+  if (preview) return <HeroRemodel canvasRef={canvasRef} />;
 
   return (
     <section
