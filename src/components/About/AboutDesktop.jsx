@@ -1,3 +1,4 @@
+import ArrowIcon from "../Flow/ArrowIcon";
 import { useRef, useState } from "react";
 import phoneView from "../../assets/phoneView.png";
 import FlowReveal from "../Flow/FlowReveal";
@@ -30,8 +31,8 @@ export default function About() {
             <h2 id="a-title">Digital systems.<br /><em>A human touch.</em></h2>
             <p className="a-intro">I create immersive frontend experiences and scalable digital systems that combine visual precision, interaction design, and modern web engineering.</p>
             <p className="a-detail">My work lives at the intersection of creativity, performance, and structure. Thoughtful interfaces that feel fluid, intentional, and human.</p>
-            <div className="a-signature"><span aria-hidden="true">a.o</span><div><strong>Achim Okiti</strong><small>Frontend developer & UI engineer</small></div></div>
-            <a href="#services" className="a-link">Explore how I work <span aria-hidden="true">↘</span></a>
+            <div className="a-signature"><strong>Achim Okiti</strong><small>Frontend developer & UI engineer</small></div>
+            <a href="#services" className="a-link">Explore how I work <span aria-hidden="true"><ArrowIcon direction="se" /></span></a>
           </div>
           <div className="a-stage"><div className="a-grid" aria-hidden="true" /><span className="a-stage-label">Form / Function / Feeling</span>
             {enabled ? <div className="a-live-phone" aria-hidden="true"><div className="a-hardware"><div className="a-screen">
@@ -39,10 +40,10 @@ export default function About() {
               <div className="a-web" ref={web}><iframe ref={frame} src={new URLSearchParams(location.search).get("hero") === "preview" ? "/?phone=1&hero=preview" : "/?phone=1"} title="Mobile portfolio preview" tabIndex={-1} scrolling="no" inert /></div>
               <span className="a-home-indicator" /></div></div></div>
               : <img className="a-static-phone" src={phoneView} alt="UNBOX portfolio displayed on a mobile phone" width="1017" height="1524" loading="lazy" />}
-            <div className="a-stage-note"><span aria-hidden="true">↗</span><span>{enabled ? <>Scroll a little.<br />See the bigger picture.</> : <>Every detail,<br />intentional.</>}</span></div>
+            <div className="a-stage-note"><span aria-hidden="true"><ArrowIcon direction="ne" /></span><span>{enabled ? <>Scroll a little.<br />See the bigger picture.</> : <>Every detail,<br />intentional.</>}</span></div>
             <div className="a-caption"><span />{enabled ? "The actual page. A different perspective." : "Clarity at every scale."}</div>
           </div>
-          {enabled && <div className="a-sequence"><span>{paused ? "Phone motion paused" : "Scroll to explore"}</span><div><span /></div><button type="button" aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? "Play motion ▷" : "Pause motion Ⅱ"}</button><a href="#services">Skip to services ↘</a></div>}
+          {enabled && <div className="a-sequence"><span>{paused ? "Phone motion paused" : "Scroll to explore"}</span><div><span /></div><button type="button" aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? "Play motion ▷" : "Pause motion Ⅱ"}</button><a href="#services">Skip to services <ArrowIcon direction="se" /></a></div>}
         </div>
       </div>
     </div>
@@ -50,11 +51,11 @@ export default function About() {
       <FlowReveal className="a-philosophy"><p className="a-eyebrow">The way I think</p><h3>Experiences that <em>feel alive.</em></h3><p>Every interaction should feel intentional. Every transition should carry weight. I blend motion, rhythm, typography, and engineering into experiences that communicate beyond visuals alone.</p></FlowReveal>
       <FlowReveal className="a-values" role="tablist" aria-label="Explore design values">
         {values.map((value, index) => <button key={value.title} type="button" role="tab" id={`a-value-${index}`} aria-label={value.title} aria-selected={active === index} aria-controls="a-value-study" tabIndex={active === index ? 0 : -1} ref={(el) => { tabs.current[index] = el; }} onClick={() => setActive(index)} onKeyDown={(e) => handleKeys(e, index)}>
-          <span className="a-value-top"><span>0{index + 1}</span><span aria-hidden="true">{value.icon}</span></span><span className="a-value-title">{value.title}</span><span className="a-value-description">{value.description}</span><span className="a-value-bottom">{value.label}<b aria-hidden="true">↗</b></span>
+          <span className="a-value-top"><span>0{index + 1}</span><span aria-hidden="true">{value.icon}</span></span><span className="a-value-title">{value.title}</span><span className="a-value-description">{value.description}</span><span className="a-value-bottom">{value.label}<b aria-hidden="true"><ArrowIcon direction="ne" /></b></span>
         </button>)}
       </FlowReveal>
-      <div className="a-value-study" role="tabpanel" id="a-value-study" aria-labelledby={`a-value-${active}`}><span>0{active + 1}</span><p>{values[active].detail}</p><small>Select a principle to explore ↑</small></div>
-      <FlowReveal><a href="#services" className="a-bridge"><span>Designed with intention.<br />Built to endure.</span><span aria-hidden="true">↘</span></a></FlowReveal>
+      <div className="a-value-study" role="tabpanel" id="a-value-study" aria-labelledby={`a-value-${active}`}><span>0{active + 1}</span><p>{values[active].detail}</p><small>Select a principle to explore <ArrowIcon direction="up" /></small></div>
+      <FlowReveal><a href="#services" className="a-bridge"><span>Designed with intention.<br />Built to endure.</span><span aria-hidden="true"><ArrowIcon direction="se" /></span></a></FlowReveal>
     </div>
   </section>;
 }

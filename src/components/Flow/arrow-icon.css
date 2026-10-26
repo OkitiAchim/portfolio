@@ -1,0 +1,8 @@
+.ui-arrow{display:inline-block;width:1em;height:1em;vertical-align:-.12em;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.ui-arrow[data-direction=se]{transform:rotate(90deg)}
+.ui-arrow[data-direction=sw]{transform:rotate(180deg)}
+.ui-arrow[data-direction=nw]{transform:rotate(270deg)}
+.ui-arrow[data-direction=up]{transform:rotate(-45deg)}
+.ui-arrow[data-direction=down]{transform:rotate(135deg)}
+.ui-arrow[data-direction=right]{transform:rotate(45deg)}
+.ui-arrow[data-direction=left]{transform:rotate(225deg)}

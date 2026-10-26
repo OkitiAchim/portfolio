@@ -65,6 +65,14 @@ export default function NavbarIsland() {
     return () => { alive = false; cancelAnimationFrame(raf); observer.disconnect(); window.removeEventListener("scroll", queue); window.removeEventListener("resize", measure); };
   }, []);
 
+  const navigate = id => {
+    if (matchMedia("(max-width: 1023px)").matches) {
+      setCollapsed(true);
+      toggle.current?.focus({ preventScroll: true });
+    }
+    scrollToSection(id, id === "hero" ? 0 : 100);
+  };
+
   const onKeyDown = event => {
     if (event.key === "Escape" && !collapsed) {
       setCollapsed(true); toggle.current?.focus();
@@ -75,9 +83,9 @@ export default function NavbarIsland() {
     <div className="ni-island" data-collapsed={collapsed}>
       <motion.div className="ni-expanded" inert={collapsed ? true : undefined} aria-hidden={collapsed} initial={false}
         animate={{ opacity: collapsed ? 0 : 1 }} transition={{ delay: reduced || collapsed ? 0 : .2, duration: reduced ? 0 : collapsed ? .12 : .25 }}>
-          <button type="button" className="ni-brand" aria-label="Return to homepage" onClick={() => scrollToSection("hero", 0)}>UNBOX<span>.</span></button>
+          <button type="button" className="ni-brand" aria-label="Return to homepage" onClick={() => navigate("hero")}>UNBOX<span>.</span></button>
           <nav id="ni-section-links" className="ni-links" aria-label="Primary navigation">
-            {sections.slice(1).map(section => <button type="button" key={section.id} aria-current={active.id === section.id ? "location" : undefined} onClick={() => scrollToSection(section.id)}>{section.nav}<i aria-hidden="true" /></button>)}
+            {sections.slice(1).map(section => <button type="button" key={section.id} aria-current={active.id === section.id ? "location" : undefined} onClick={() => navigate(section.id)}>{section.nav}<i aria-hidden="true" /></button>)}
           </nav>
       </motion.div>
       <button type="button" ref={toggle} className="ni-toggle" aria-expanded={!collapsed} aria-controls="ni-section-links"

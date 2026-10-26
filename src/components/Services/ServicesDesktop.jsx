@@ -1,3 +1,4 @@
+import ArrowIcon from "../Flow/ArrowIcon";
 import { useRef, useState } from "react";
 import FlowReveal from "../Flow/FlowReveal";
 import "./services.css";
@@ -38,20 +39,20 @@ function ServiceVisual({ active }) {
       <div className="svc-visual-caption"><span>The details make the difference</span><span>0{active + 1} / 03</span></div>
       <div className="svc-visual-scene svc-scene-development">
         <div className="svc-wire-browser"><div className="svc-wire-top"><i /><i /><i /><span>Your next website</span></div>
-          <div className="svc-wire-nav"><strong>Brand.</strong><span /><span /><b>↗</b></div>
+          <div className="svc-wire-nav"><strong>Brand.</strong><span /><span /><b><ArrowIcon direction="ne" /></b></div>
           <div className="svc-wire-hero"><span>Something<br /><em>worth exploring.</em></span><i /></div>
           <div className="svc-wire-body"><i /><i /><i /></div>
         </div>
-        <div className="svc-wire-phone"><span /><div>Made<br /><em>for every<br />screen.</em></div><b>↗</b></div>
+        <div className="svc-wire-phone"><span /><div>Made<br /><em>for every<br />screen.</em></div><b><ArrowIcon direction="ne" /></b></div>
         <div className="svc-responsive-caption"><i />One experience. Every screen.</div>
       </div>
       <div className="svc-visual-scene svc-scene-design">
-        <div className="svc-type-study"><small>Hierarchy / Rhythm / Character</small><span>Aa<span>↗</span></span><div><i /><i /><i /><i /><i /></div></div>
-        <div className="svc-interaction-study"><span>A detail worth feeling.</span><div><span>Explore</span><b>↗</b></div></div>
+        <div className="svc-type-study"><small>Hierarchy / Rhythm / Character</small><span>Aa<span><ArrowIcon direction="ne" /></span></span><div><i /><i /><i /><i /><i /></div></div>
+        <div className="svc-interaction-study"><span>A detail worth feeling.</span><div><span>Explore</span><b><ArrowIcon direction="ne" /></b></div></div>
       </div>
       <div className="svc-visual-scene svc-scene-launch">
         <div className="svc-launch-orbit"><svg viewBox="0 0 400 240"><path d="M40 160 C100 160 75 80 150 80 S210 160 270 130 S300 45 365 45" /><circle cx="40" cy="160" r="8" /><circle cx="150" cy="80" r="8" /><circle cx="270" cy="130" r="8" /><circle cx="365" cy="45" r="8" /></svg>
-          <span className="svc-launch-label svc-l1">Refine</span><span className="svc-launch-label svc-l2">Check</span><span className="svc-launch-label svc-l3">Deploy</span><span className="svc-launch-label svc-l4">Live ↗</span>
+          <span className="svc-launch-label svc-l1">Refine</span><span className="svc-launch-label svc-l2">Check</span><span className="svc-launch-label svc-l3">Deploy</span><span className="svc-launch-label svc-l4">Live <ArrowIcon direction="ne" /></span>
         </div>
         <div className="svc-launch-caption"><span className="svc-launch-indicator" />Every detail, ready for the real world.</div>
       </div>
@@ -98,7 +99,7 @@ export default function Services() {
           {services.map((service, index) => <button key={service.title} ref={(element) => { tabs.current[index] = element; }}
             type="button" role="tab" id={`svc-tab-${index}`} aria-label={service.title} aria-selected={active === index}
             aria-controls="svc-detail" tabIndex={active === index ? 0 : -1} onClick={() => setActive(index)} onKeyDown={(event) => handleKeys(event, index)} onPointerMove={moveGlass} onPointerLeave={resetGlass}>
-            <span className="svc-service-top"><span>{service.chapter}</span><span aria-hidden="true">↗</span></span>
+            <span className="svc-service-top"><span>{service.chapter}</span><span aria-hidden="true"><ArrowIcon direction="ne" /></span></span>
             <span className="svc-service-title">{service.lines[0]}<br />{service.lines[1]}</span>
             <span className="svc-service-description">{service.description}</span>
             <span className="svc-tech-list">{service.skills.map((skill) => <span key={skill}>{skill}</span>)}</span>
@@ -106,12 +107,12 @@ export default function Services() {
           </button>)}
         </FlowReveal>
         <FlowReveal className="svc-service-detail" id="svc-detail" role="tabpanel" aria-labelledby={`svc-tab-${active}`}>
-          <div className="svc-detail-copy" key={active}><p className="svc-eyebrow">{selected.kicker}</p><h3>{selected.heading[0]}<br />{selected.heading[1]}</h3><ul>{selected.items.map((item) => <li key={item}>{item}</li>)}</ul>
-            <a href="#contact" className="svc-quiet-link" onClick={selectBrief}>{selected.cta}<span aria-hidden="true">↗</span></a>
+          <div className="svc-detail-copy" key={active}><p className="svc-eyebrow">{selected.kicker}</p><h3>{selected.heading[0]}<br />{selected.heading[1]}</h3><ul>{selected.items.map((item) => <li key={item}><ArrowIcon /><span>{item}</span></li>)}</ul>
+            <a href="#contact" className="svc-quiet-link" onClick={selectBrief}>{selected.cta}<span aria-hidden="true"><ArrowIcon direction="ne" /></span></a>
           </div>
           <ServiceVisual active={active} />
         </FlowReveal>
-        <FlowReveal className="svc-services-exit"><div><p className="svc-eyebrow">From possibility to proof</p><h3>See ideas <em>come to life.</em></h3></div><a href="#projects" aria-label="Continue to selected work"><span aria-hidden="true">↘</span></a></FlowReveal>
+        <FlowReveal className="svc-services-exit"><div><p className="svc-eyebrow">From possibility to proof</p><h3>See ideas <em>come to life.</em></h3></div><a href="#projects" aria-label="Continue to selected work"><span aria-hidden="true"><ArrowIcon direction="se" /></span></a></FlowReveal>
       </div>
     </section>
   );

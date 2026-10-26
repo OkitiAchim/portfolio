@@ -1,3 +1,4 @@
+import ArrowIcon from "../Flow/ArrowIcon";
 import { useState } from "react";
 import FlowReveal from "../Flow/FlowReveal";
 import FlowDialog from "../Flow/FlowDialog";
@@ -46,7 +47,7 @@ export default function Projects() {
 
   return (
     <section id="work" className={`flow-work ${tickerPaused ? "flow-ticker-paused" : ""}`} aria-labelledby="flow-work-title">
-      <div className="flow-marquee" aria-hidden="true"><div>{[0, 1].map((n) => <span key={n}>Idea <b>↗</b> Interaction <b>↗</b> Impact <b>↗</b> </span>)}</div></div>
+      <div className="flow-marquee" aria-hidden="true"><div>{[0, 1].map((n) => <span key={n}>Idea <b><ArrowIcon direction="ne" /></b> Interaction <b><ArrowIcon direction="ne" /></b> Impact <b><ArrowIcon direction="ne" /></b> </span>)}</div></div>
       <div className="flow-work-content">
         <div className="flow-chapter"><span>Selected work / 02 projects</span><button className="flow-motion-toggle" type="button" aria-pressed={tickerPaused} onClick={() => setTickerPaused(!tickerPaused)}>{tickerPaused ? "Play animated text" : "Pause animated text"}<span aria-hidden="true">{tickerPaused ? "▷" : "Ⅱ"}</span></button></div>
         <FlowReveal className="flow-work-heading">
@@ -58,18 +59,18 @@ export default function Projects() {
             <button type="button" className="flow-project-visual" onClick={() => setSelected(project)}
               onPointerMove={handleTilt} onPointerLeave={resetTilt} onPointerCancel={resetTilt}
               aria-label={`Explore ${project.title}`} aria-haspopup="dialog">
-              <span className="flow-browser-strip"><span aria-hidden="true">● ● ●</span><span>{project.name} / {project.location}</span><span aria-hidden="true">↗</span></span>
+              <span className="flow-browser-strip"><span aria-hidden="true">● ● ●</span><span>{project.name} / {project.location}</span><span aria-hidden="true"><ArrowIcon direction="ne" /></span></span>
               <span className="flow-image-wrap"><img src={project.image} alt={project.imageAlt} loading="lazy" decoding="async" />
-                <span className="flow-project-open">Explore project <span aria-hidden="true">↗</span></span>
+                <span className="flow-project-open">Explore project <span aria-hidden="true"><ArrowIcon direction="ne" /></span></span>
               </span>
             </button>
             <div className="flow-project-info">
               <div><p className="flow-eyebrow">{project.id} / {project.category}</p><h3>{project.titleLines[0]}<br />{project.titleLines[1]}</h3></div>
-              <div><p className="flow-project-description">{project.description}</p><button type="button" className="flow-text-link" onClick={() => setSelected(project)} aria-label={`A closer look at ${project.title}`} aria-haspopup="dialog">A closer look <span aria-hidden="true">↗</span></button></div>
+              <div><p className="flow-project-description">{project.description}</p><button type="button" className="flow-text-link" onClick={() => setSelected(project)} aria-label={`A closer look at ${project.title}`} aria-haspopup="dialog">A closer look <span aria-hidden="true"><ArrowIcon direction="ne" /></span></button></div>
             </div>
           </FlowReveal>
         ))}
-        <FlowReveal className="flow-work-outro"><span>The next project<br />could be yours.</span><a href="#contact" aria-label="Start your project"><span aria-hidden="true">↘</span></a></FlowReveal>
+        <FlowReveal className="flow-work-outro"><span>The next project<br />could be yours.</span><a href="#contact" aria-label="Start your project"><span aria-hidden="true"><ArrowIcon direction="se" /></span></a></FlowReveal>
       </div>
       <FlowDialog open={Boolean(selected)} onClose={() => setSelected(null)} titleId="flow-project-title" label="A closer look / Selected work">
         {selected && <>
@@ -78,7 +79,7 @@ export default function Projects() {
           <img className="flow-dialog-image" src={selected.image} alt={selected.imageAlt} />
           <p className="flow-eyebrow">Interface detail / {selected.detailLabel}</p>
           <img className="flow-dialog-image" src={selected.secondaryImage} alt={selected.secondaryAlt} loading="lazy" />
-          <a className="flow-text-link" href="#contact" onClick={() => setSelected(null)}>Have something in mind? <span aria-hidden="true">↗</span></a>
+          <a className="flow-text-link" href="#contact" onClick={() => setSelected(null)}>Have something in mind? <span aria-hidden="true"><ArrowIcon direction="ne" /></span></a>
         </>}
       </FlowDialog>
     </section>
