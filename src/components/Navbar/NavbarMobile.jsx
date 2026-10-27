@@ -1,376 +1,87 @@
-import { scrollToSection } from "../Scroll/controller";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
-const NAV_LINKS = ["About", "Services", "Work", "Contact"];
-
-const SECTION_MAP = {
-  About: "about",
-  Services: "services",
-  Work: "projects",
-  Contact: "contact",
-};
-
-const menuVariants = {
-  closed: {
-    opacity: 0,
-    y: -12,
-    transition: {
-      duration: 0.2,
-    },
-  },
-
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.35,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-const itemVariants = {
-  closed: {
-    opacity: 0,
-    y: 12,
-  },
-
-  open: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.45,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
+import { scrollToSection } from "../Scroll/controller";
+import useNavigationState, { sections, labelMotion } from "./useNavigationState";
+import "./navbar-mobile.css";
 
 export default function NavbarMobile() {
-  const [scrolled, setScrolled] = useState(false);
-  const [active, setActive] = useState(null);
+  const [collapsed, setCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const { active, reduced, tone } = useNavigationState();
+  const root = useRef(null);
+  const toggle = useRef(null);
+  const menuToggle = useRef(null);
+  const menu = useRef(null);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 24);
-    };
-
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
-
+    if (!menuOpen) return;
+    const oldOverflow = document.body.style.overflow;
+    const content = sections.map(section => document.getElementById(section.id)).filter(Boolean);
+    const oldInert = content.map(element => element.inert);
+    document.body.style.overflow = "hidden";
+    content.forEach(element => { element.inert = true; });
+    menu.current?.querySelector("button")?.focus({ preventScroll: true });
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      document.body.style.overflow = oldOverflow;
+      content.forEach((element, index) => { element.inert = oldInert[index]; });
     };
-  }, []);
+  }, [menuOpen]);
 
-  useEffect(() => {
-    const sections = [
-      { id: "about", label: "About" },
-      { id: "services", label: "Services" },
-      { id: "projects", label: "Work" },
-      { id: "contact", label: "Contact" },
-    ];
-
-    const handleScroll = () => {
-      const scrollY = window.scrollY + 180;
-
-      let found = null;
-
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-
-        if (!element) continue;
-
-        if (scrollY >= element.offsetTop) {
-          found = section.label;
-        }
-      }
-
-      setActive(found);
-    };
-
-    window.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
-
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const handleNav = (link) => {
-    setActive(link);
+  const closeMenu = () => {
     setMenuOpen(false);
-
-    const sectionId = SECTION_MAP[link];
-    const element = document.getElementById(sectionId);
-
-    if (!element) return;
-
-    scrollToSection(sectionId);
+    menuToggle.current?.focus({ preventScroll: true });
+  };
+  const navigate = id => {
+    closeMenu();
+    scrollToSection(id, id === "hero" ? 0 : 100);
+  };
+  const onKeyDown = event => {
+    if (event.key === "Escape") {
+      if (menuOpen) closeMenu();
+      else { setCollapsed(true); toggle.current?.focus({ preventScroll: true }); }
+    }
+    if (menuOpen && event.key === "Tab") {
+      const buttons = [...root.current.querySelectorAll("button:not([disabled])")].filter(button => button.getClientRects().length);
+      const first = buttons[0], last = buttons.at(-1);
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    }
   };
 
-  const handleLogoClick = () => {
-    setActive(null);
-    setMenuOpen(false);
-
-    scrollToSection("hero", 0);
-  };
-
-  return (
-    <>
-      {/* ── Mobile header ───────────────────────────────────────── */}
-      <header className="fixed inset-x-0 top-0 z-[60] px-4 pt-4">
-        <div
-          className={`
-            flex
-            h-[58px]
-            w-full
-            items-center
-            justify-between
-            rounded-2xl
-            px-5
-            transition-all
-            duration-500
-            ${
-              scrolled || menuOpen
-                ? "border border-white/[0.08] bg-black/45 backdrop-blur-2xl shadow-[0_8px_35px_rgba(0,0,0,0.35)]"
-                : "border border-transparent bg-transparent"
-            }
-          `}
-        >
-          {/* Logo */}
-          <button
-            onClick={handleLogoClick}
-            className="
-              select-none
-              font-display
-              text-[15px]
-              font-semibold
-              uppercase
-              tracking-[0.16em]
-              text-white/90
-            "
-            aria-label="Return to homepage"
-          >
-            unbox<span className="text-indigo-400/80">.</span>
+  return <div className="nm-navigation" ref={root} onKeyDown={onKeyDown} role={menuOpen ? "dialog" : undefined} aria-modal={menuOpen || undefined} aria-label={menuOpen ? "Mobile navigation" : undefined}>
+    <header className="nm-header" data-tone={menuOpen ? "dark" : tone}>
+      <div className="nm-shell" data-collapsed={collapsed}>
+        <motion.div className="nm-expanded" inert={collapsed ? true : undefined} aria-hidden={collapsed} initial={false}
+          animate={{ opacity: collapsed ? 0 : 1 }} transition={{ duration: reduced ? 0 : .18, delay: collapsed || reduced ? 0 : .16 }}>
+          <button type="button" className="nm-brand" aria-label="Return to homepage" onClick={() => navigate("hero")}>UNBOX<span>.</span></button>
+          <button type="button" className="nm-menu-toggle" ref={menuToggle} aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} aria-expanded={menuOpen} aria-controls="nm-menu" onClick={() => setMenuOpen(!menuOpen)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              {menuOpen ? <path d="m5 5 14 14M19 5 5 19" /> : <path d="M3 7h18M3 12h18M3 17h18" />}
+            </svg>
           </button>
-
-          {/* Menu button */}
-          <button
-            onClick={() => setMenuOpen((value) => !value)}
-            className="
-              flex
-              h-10
-              w-10
-              items-center
-              justify-center
-              rounded-full
-              border
-              border-white/[0.08]
-              bg-white/[0.025]
-            "
-            aria-label={
-              menuOpen ? "Close navigation menu" : "Open navigation menu"
-            }
-            aria-expanded={menuOpen}
-          >
-            <span className="relative flex h-4 w-5 flex-col justify-center">
-              <motion.span
-                animate={menuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -4 }}
-                transition={{
-                  duration: 0.25,
-                }}
-                className="
-                  absolute
-                  left-0
-                  block
-                  h-px
-                  w-5
-                  origin-center
-                  bg-white/65
-                "
-              />
-
-              <motion.span
-                animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
-                transition={{
-                  duration: 0.15,
-                }}
-                className="
-                  absolute
-                  left-0
-                  block
-                  h-px
-                  w-5
-                  bg-white/65
-                "
-              />
-
-              <motion.span
-                animate={menuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 4 }}
-                transition={{
-                  duration: 0.25,
-                }}
-                className="
-                  absolute
-                  left-0
-                  block
-                  h-px
-                  w-5
-                  origin-center
-                  bg-white/65
-                "
-              />
-            </span>
-          </button>
-        </div>
-      </header>
-
-      {/* ── Mobile navigation ───────────────────────────────────── */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            variants={menuVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            className="
-              fixed
-              inset-0
-              z-50
-              bg-black/92
-              backdrop-blur-2xl
-            "
-          >
-            <div
-              className="
-                flex
-                min-h-full
-                flex-col
-                px-7
-                pb-10
-                pt-32
-              "
-            >
-              {/* Menu label */}
-              <motion.p
-                variants={itemVariants}
-                className="
-                  mb-10
-                  font-dm
-                  text-[9px]
-                  font-light
-                  uppercase
-                  tracking-[0.28em]
-                  text-white/25
-                "
-              >
-                Navigation
-              </motion.p>
-
-              {/* Links */}
-              <nav className="flex flex-col" aria-label="Mobile navigation">
-                {NAV_LINKS.map((link, index) => {
-                  const isActive = active === link;
-
-                  return (
-                    <motion.button
-                      key={link}
-                      variants={itemVariants}
-                      custom={index}
-                      onClick={() => handleNav(link)}
-                      className="
-                        group
-                        flex
-                        min-h-[64px]
-                        items-center
-                        justify-between
-                        border-b
-                        border-white/[0.07]
-                        text-left
-                      "
-                    >
-                      <span
-                        className={`
-                          font-dm
-                          text-[clamp(1.15rem,5vw,1.4rem)]
-                          font-light
-                          tracking-[-0.01em]
-                          transition-colors
-                          duration-300
-                          ${
-                            isActive
-                              ? "text-white"
-                              : "text-white/45 group-active:text-white"
-                          }
-                        `}
-                      >
-                        {link}
-                      </span>
-
-                      <span
-                        className={`
-                          text-[10px]
-                          tracking-[0.15em]
-                          transition-opacity
-                          duration-300
-                          ${
-                            isActive ? "opacity-100 text-white/40" : "opacity-0"
-                          }
-                        `}
-                      >
-                        0{index + 1}
-                      </span>
-                    </motion.button>
-                  );
-                })}
-              </nav>
-
-              {/* Bottom detail */}
-              <motion.div
-                variants={itemVariants}
-                className="
-                  mt-auto
-                  flex
-                  items-end
-                  justify-between
-                  pt-12
-                "
-              >
-                <span
-                  className="
-                    font-dm
-                    text-[9px]
-                    font-light
-                    uppercase
-                    tracking-[0.2em]
-                    text-white/20
-                  "
-                >
-                  Frontend Developer
-                </span>
-
-                <span
-                  className="
-                    font-dm
-                    text-[9px]
-                    uppercase
-                    tracking-[0.2em]
-                    text-white/20
-                  "
-                >
-                  2026
-                </span>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
+        </motion.div>
+        <button type="button" className="nm-collapse" ref={toggle} aria-expanded={!collapsed} aria-label={collapsed ? `Expand navigation, current section: ${active.label}` : "Collapse navigation"} onClick={() => { if (menuOpen) setMenuOpen(false); setCollapsed(!collapsed); }}>
+          {collapsed ? <><span className="nm-dot" aria-hidden="true" /><span className="nm-label-window">
+            <AnimatePresence initial={false} mode="wait" custom={active.direction}>
+              <motion.span className={`nm-label ${active.id === "hero" ? "nm-label-brand" : ""}`} key={active.id} custom={active.direction} variants={labelMotion}
+                initial="enter" animate="center" exit="exit" transition={{ duration: reduced ? 0 : .23, ease: [.22, 1, .36, 1] }}>{active.label}</motion.span>
+            </AnimatePresence>
+          </span><svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 6 3 10l4 4M13 6l4 4-4 4" /></svg></>
+            : <svg width="22" height="18" viewBox="0 0 28 20" fill="none" aria-hidden="true"><path d="m4 5 5 5-5 5m20-10-5 5 5 5M14 6v8" /></svg>}
+        </button>
+      </div>
+    </header>
+    <AnimatePresence>
+      {menuOpen && <motion.div className="nm-menu" id="nm-menu" ref={menu} data-lenis-prevent initial={{ opacity: 0, y: reduced ? 0 : -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduced ? 0 : -8 }} transition={{ duration: reduced ? 0 : .25 }}>
+        <p className="nm-menu-caption">Navigation</p>
+        <nav aria-label="Mobile section links">
+          {sections.slice(1).map((section, index) => <motion.button type="button" key={section.id} aria-current={active.id === section.id ? "location" : undefined} onClick={() => navigate(section.id)}
+            initial={{ opacity: 0, y: reduced ? 0 : 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduced ? 0 : index * .045, duration: reduced ? 0 : .3 }}>
+            <span>{section.nav}</span><small aria-hidden="true">0{index + 1}</small>
+          </motion.button>)}
+        </nav>
+        <div className="nm-menu-footer"><span>Frontend developer</span><span>{new Date().getFullYear()}</span></div>
+      </motion.div>}
+    </AnimatePresence>
+  </div>;
 }
