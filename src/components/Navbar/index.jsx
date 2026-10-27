@@ -12,5 +12,6 @@ const isDesktop = () => matchMedia(desktopQuery).matches;
 
 export default function Navbar() {
   const desktop = useSyncExternalStore(subscribe, isDesktop, () => false);
-  return desktop ? <NavbarIsland /> : <NavbarMobile />;
+  const phonePreview = new URLSearchParams(location.search).has("phone");
+  return desktop && !phonePreview ? <NavbarIsland /> : <NavbarMobile />;
 }

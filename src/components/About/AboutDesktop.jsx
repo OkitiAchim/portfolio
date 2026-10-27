@@ -1,6 +1,6 @@
 import ArrowIcon from "../Flow/ArrowIcon";
 import { useRef, useState } from "react";
-import phoneView from "../../assets/phoneView.png";
+import phoneScreen from "../../assets/phoneScreen-current.jpg";
 import FlowReveal from "../Flow/FlowReveal";
 import usePhoneStory from "./usePhoneStory";
 import "./about.css";
@@ -35,11 +35,12 @@ export default function About() {
             <a href="#services" className="a-link">Explore how I work <span aria-hidden="true"><ArrowIcon direction="se" /></span></a>
           </div>
           <div className="a-stage"><div className="a-grid" aria-hidden="true" /><span className="a-stage-label">Form / Function / Feeling</span>
-            {enabled ? <div className="a-live-phone" aria-hidden="true"><div className="a-hardware"><div className="a-screen">
+            <div className={`a-live-phone${enabled ? "" : " a-still-phone"}`} aria-hidden={enabled || undefined} role={enabled ? undefined : "img"} aria-label={enabled ? undefined : "UNBOX portfolio with current compact mobile navigation"}><div className="a-hardware"><div className="a-screen">
               <div className="a-status"><span>9:41</span><i /><span>▰ ▰</span></div>
-              <div className="a-web" ref={web}><iframe ref={frame} src={new URLSearchParams(location.search).get("hero") === "preview" ? "/?phone=1&hero=preview" : "/?phone=1"} title="Mobile portfolio preview" tabIndex={-1} scrolling="no" inert /></div>
+              <div className="a-web" ref={web}>{enabled
+                ? <iframe ref={frame} src={new URLSearchParams(location.search).get("hero") === "preview" ? "/?phone=1&ui=compact-mobile&hero=preview" : "/?phone=1&ui=compact-mobile"} title="Mobile portfolio preview" tabIndex={-1} scrolling="no" inert />
+                : <img className="a-screen-image" src={phoneScreen} alt="" width="390" height="844" loading="lazy" />}</div>
               <span className="a-home-indicator" /></div></div></div>
-              : <img className="a-static-phone" src={phoneView} alt="UNBOX portfolio displayed on a mobile phone" width="1017" height="1524" loading="lazy" />}
             <div className="a-stage-note"><span aria-hidden="true"><ArrowIcon direction="ne" /></span><span>{enabled ? <>Scroll a little.<br />See the bigger picture.</> : <>Every detail,<br />intentional.</>}</span></div>
             <div className="a-caption"><span />{enabled ? "The actual page. A different perspective." : "Clarity at every scale."}</div>
           </div>
