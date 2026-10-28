@@ -21,19 +21,26 @@
 
 /* Share the desktop phone timeline, with a separate pin after the mobile copy. */
 .a-phone-track,.a-phone-pin{display:contents}
-.a-mobile-focus{display:none}
+.a-mobile-focus,.a-depth-copy{display:none}
 @media(max-width:1023px){
   .a-story[data-sequence-enabled=true] .a-phone-pin{isolation:isolate}
   .a-story[data-sequence-enabled=true] .a-mobile-focus{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;background:#03050766;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);opacity:var(--mobile-focus,0)}
-  .a-story[data-sequence-enabled=true] .a-copy{filter:blur(var(--mobile-background-blur,0px))!important}
-  .a-story[data-sequence-enabled=true] :is(.a-grid,.a-stage-label,.a-stage-note,.a-caption){filter:blur(var(--mobile-background-blur,0px))}
+  .a-story[data-sequence-enabled=true] .a-grid{filter:blur(var(--mobile-background-blur,0px))}
+  .a-story[data-sequence-enabled=true] .a-depth-copy{display:block;position:absolute;inset:26px -4px 14px;pointer-events:none;filter:blur(var(--mobile-background-blur,0px));opacity:calc(.8 - var(--mobile-focus,0) * .24);transform:translate3d(0,calc(var(--mobile-focus,0) * 8px),-60px) scale(calc(1 - var(--mobile-focus,0) * .055));color:#8995a8}
+  .a-depth-word{position:absolute;font-size:clamp(54px,17vw,78px);line-height:1;letter-spacing:-.075em;font-weight:450}
+  .a-depth-top{top:0;left:0}
+  .a-depth-bottom{bottom:0;right:0;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:400;color:#b0bbcb}
+  .a-depth-side{position:absolute;top:43%;writing-mode:vertical-rl;font-size:8px;letter-spacing:.17em;text-transform:uppercase;color:#8f9db1}
+  .a-depth-left{left:2px;transform:rotate(180deg)}
+  .a-depth-right{right:2px}
+  .a-story[data-sequence-enabled=true] .a-stage-note{filter:none;transform:translate3d(calc(var(--mobile-focus,0) * -76px),calc(var(--mobile-focus,0) * -10px),calc(45px - var(--mobile-focus,0) * 110px)) scale(calc(1 - var(--mobile-focus,0) * .08));backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(120deg,#242c38,#19212d);will-change:transform}
   .a-story[data-sequence-enabled=true]{height:auto}
   .a-story[data-sequence-enabled=true] .a-pin{position:relative;height:auto;top:auto}
   .a-story[data-sequence-enabled=true] .a-story-shell{height:auto;padding-top:55px;padding-bottom:30px}
   .a-story[data-sequence-enabled=true] .a-phone-track{display:block;height:calc(100svh - 104px + 1050px);min-width:0}
   .a-story[data-sequence-enabled=true] .a-phone-pin{display:block;position:sticky;top:104px;height:calc(100svh - 104px);padding-top:12px}
-  .a-story[data-sequence-enabled=true] .a-stage{height:calc(100% - 100px);max-height:650px;margin:0 auto}
-  .a-story[data-sequence-enabled=true] .a-live-phone{height:calc(100% - 28px);width:auto;aspect-ratio:292/622;max-width:82%;top:16px}
+  .a-story[data-sequence-enabled=true] .a-stage{height:calc(100% - 100px);max-height:650px;margin:0 auto;transform-style:preserve-3d;isolation:auto}
+  .a-story[data-sequence-enabled=true] .a-live-phone{height:calc(100% - 134px);width:auto;aspect-ratio:292/622;max-width:82%;top:65px;transform:translate3d(-50%,var(--phone-lift,0px),var(--phone-depth,0px)) rotateZ(var(--phone-angle)) rotateY(var(--phone-turn)) scale(var(--phone-scale));will-change:transform}
   .a-story[data-sequence-enabled=true] .a-hardware{border-radius:36px}
   .a-story[data-sequence-enabled=true] .a-screen{border-radius:28px}
   .a-story[data-sequence-enabled=true] .a-sequence{bottom:20px;gap:12px;flex-wrap:wrap;padding-top:10px;letter-spacing:.03em}
@@ -42,3 +49,4 @@
 }
 @media(max-width:760px){.a-story[data-sequence-enabled=true] .a-story-shell{padding-top:38px}}
 @media(max-width:359px){.a-story[data-sequence-enabled=true] .a-sequence{gap:8px;font-size:7px}.a-story[data-sequence-enabled=true] .a-sequence button,.a-story[data-sequence-enabled=true] .a-sequence>a{font-size:8px}}
+@media(max-width:1023px) and (max-height:650px){.a-story[data-sequence-enabled=true] .a-live-phone{height:calc(100% - 86px);top:43px}.a-depth-word{font-size:48px}.a-story[data-sequence-enabled=true] .a-depth-copy{inset:16px -4px 4px}.a-story[data-sequence-enabled=true] .a-stage-note{font-size:8px}}

@@ -37,6 +37,7 @@ export default function About() {
           <div className="a-phone-track"><div className="a-phone-pin">
           <div className="a-mobile-focus" aria-hidden="true" />
           <div className="a-stage"><div className="a-grid" aria-hidden="true" /><span className="a-stage-label">Form / Function / Feeling</span>
+            <div className="a-depth-copy" aria-hidden="true"><span className="a-depth-word a-depth-top">Clarity.</span><span className="a-depth-side a-depth-left">Designed with intention</span><span className="a-depth-side a-depth-right">Motion with meaning</span><span className="a-depth-word a-depth-bottom">Feeling.</span></div>
             <div className={`a-live-phone${enabled ? "" : " a-still-phone"}`} aria-hidden={enabled || undefined} role={enabled ? undefined : "img"} aria-label={enabled ? undefined : "UNBOX portfolio with current compact mobile navigation"}><div className="a-hardware"><div className="a-screen">
               <div className="a-status"><span>9:41</span><i /><span>▰ ▰</span></div>
               <div className="a-web" ref={web}>{enabled
