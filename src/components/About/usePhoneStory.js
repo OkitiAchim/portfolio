@@ -40,6 +40,9 @@ export default function usePhoneStory(paused) {
       const pinTop = parseFloat(getComputedStyle(pin).top) || 0;
       const start = track.getBoundingClientRect().top + window.scrollY - pinTop;
       const progress = clamp((window.scrollY - start) / Math.max(1, track.offsetHeight - pin.offsetHeight));
+      const mobileFocus = mobile.matches && !paused ? Math.min(1, progress / .12, (1 - progress) / .12) : 0;
+      root.style.setProperty("--mobile-focus", String(mobileFocus));
+      root.style.setProperty("--mobile-background-blur", `${(mobileFocus * 8).toFixed(2)}px`);
       const p = clamp((progress - .045) / .855);
       const eased = p * p * (3 - 2 * p);
       if (lastProgress === eased) return;
@@ -105,6 +108,7 @@ export default function usePhoneStory(paused) {
       iframe.removeEventListener("load", attach);
       window.removeEventListener("scroll", queue); window.removeEventListener("resize", queue);
       root.style.setProperty("--focus-blur", "0px"); root.style.setProperty("--focus-opacity", "1");
+      root.style.removeProperty("--mobile-focus"); root.style.removeProperty("--mobile-background-blur");
     };
   }, [enabled, paused]);
 

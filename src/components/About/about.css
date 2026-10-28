@@ -21,7 +21,12 @@
 
 /* Share the desktop phone timeline, with a separate pin after the mobile copy. */
 .a-phone-track,.a-phone-pin{display:contents}
+.a-mobile-focus{display:none}
 @media(max-width:1023px){
+  .a-story[data-sequence-enabled=true] .a-phone-pin{isolation:isolate}
+  .a-story[data-sequence-enabled=true] .a-mobile-focus{display:block;position:fixed;inset:0;z-index:-1;pointer-events:none;background:#03050766;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);opacity:var(--mobile-focus,0)}
+  .a-story[data-sequence-enabled=true] .a-copy{filter:blur(var(--mobile-background-blur,0px))!important}
+  .a-story[data-sequence-enabled=true] :is(.a-grid,.a-stage-label,.a-stage-note,.a-caption){filter:blur(var(--mobile-background-blur,0px))}
   .a-story[data-sequence-enabled=true]{height:auto}
   .a-story[data-sequence-enabled=true] .a-pin{position:relative;height:auto;top:auto}
   .a-story[data-sequence-enabled=true] .a-story-shell{height:auto;padding-top:55px;padding-bottom:30px}

@@ -35,6 +35,7 @@ export default function About() {
             <a href="#services" className="a-link">Explore how I work <span aria-hidden="true"><ArrowIcon direction="se" /></span></a>
           </div>
           <div className="a-phone-track"><div className="a-phone-pin">
+          <div className="a-mobile-focus" aria-hidden="true" />
           <div className="a-stage"><div className="a-grid" aria-hidden="true" /><span className="a-stage-label">Form / Function / Feeling</span>
             <div className={`a-live-phone${enabled ? "" : " a-still-phone"}`} aria-hidden={enabled || undefined} role={enabled ? undefined : "img"} aria-label={enabled ? undefined : "UNBOX portfolio with current compact mobile navigation"}><div className="a-hardware"><div className="a-screen">
               <div className="a-status"><span>9:41</span><i /><span>▰ ▰</span></div>
