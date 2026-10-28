@@ -34,6 +34,7 @@ export default function About() {
             <div className="a-signature"><strong>Achim Okiti</strong><small>Frontend developer & UI engineer</small></div>
             <a href="#services" className="a-link">Explore how I work <span aria-hidden="true"><ArrowIcon direction="se" /></span></a>
           </div>
+          <div className="a-phone-track"><div className="a-phone-pin">
           <div className="a-stage"><div className="a-grid" aria-hidden="true" /><span className="a-stage-label">Form / Function / Feeling</span>
             <div className={`a-live-phone${enabled ? "" : " a-still-phone"}`} aria-hidden={enabled || undefined} role={enabled ? undefined : "img"} aria-label={enabled ? undefined : "UNBOX portfolio with current compact mobile navigation"}><div className="a-hardware"><div className="a-screen">
               <div className="a-status"><span>9:41</span><i /><span>▰ ▰</span></div>
@@ -45,6 +46,7 @@ export default function About() {
             <div className="a-caption"><span />{enabled ? "The actual page. A different perspective." : "Clarity at every scale."}</div>
           </div>
           {enabled && <div className="a-sequence"><span>{paused ? "Phone motion paused" : "Scroll to explore"}</span><div><span /></div><button type="button" aria-pressed={paused} onClick={() => setPaused(!paused)}>{paused ? "Play motion ▷" : "Pause motion Ⅱ"}</button><a href="#services">Skip to services <ArrowIcon direction="se" /></a></div>}
+          </div></div>
         </div>
       </div>
     </div>

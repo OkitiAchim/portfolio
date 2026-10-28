@@ -9,13 +9,11 @@ export default function usePhoneStory(paused) {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    const desktop = matchMedia("(min-width: 1024px)");
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setEnabled(desktop.matches && !reduced.matches && !new URLSearchParams(location.search).has("phone"));
+    const sync = () => setEnabled(!reduced.matches && !new URLSearchParams(location.search).has("phone"));
     sync();
-    desktop.addEventListener("change", sync);
     reduced.addEventListener("change", sync);
-    return () => { desktop.removeEventListener("change", sync); reduced.removeEventListener("change", sync); };
+    return () => reduced.removeEventListener("change", sync);
   }, []);
 
   useEffect(() => {
@@ -23,6 +21,7 @@ export default function usePhoneStory(paused) {
     const iframe = frame.current;
     const viewport = web.current;
     if (!enabled || !root || !iframe || !viewport) return;
+    const mobile = matchMedia("(max-width: 1023px)");
     let target = 0, lastTop = -1, lastProgress = -1, raf = 0;
     let frameResize, frameMutation;
     let inView = false;
@@ -31,12 +30,16 @@ export default function usePhoneStory(paused) {
       if (event.origin === location.origin && event.source === iframe.contentWindow && event.data?.type === "portfolio:phone-ready") publishVisibility();
     };
     const visibility = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; publishVisibility(); });
-    visibility.observe(root);
+    visibility.observe(viewport);
     window.addEventListener("message", onPhoneReady);
     const update = () => {
       raf = 0;
-      const start = root.getBoundingClientRect().top + window.scrollY;
-      const progress = clamp((window.scrollY - start) / Math.max(1, root.offsetHeight - window.innerHeight));
+      // Mobile lets the copy pass first, then pins the phone below the navbar.
+      const track = mobile.matches ? root.querySelector(".a-phone-track") : root;
+      const pin = root.querySelector(mobile.matches ? ".a-phone-pin" : ".a-pin");
+      const pinTop = parseFloat(getComputedStyle(pin).top) || 0;
+      const start = track.getBoundingClientRect().top + window.scrollY - pinTop;
+      const progress = clamp((window.scrollY - start) / Math.max(1, track.offsetHeight - pin.offsetHeight));
       const p = clamp((progress - .045) / .855);
       const eased = p * p * (3 - 2 * p);
       if (lastProgress === eased) return;

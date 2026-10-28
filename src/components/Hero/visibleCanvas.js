@@ -14,15 +14,27 @@ export default function visibleCanvas(canvas, draw) {
   };
   const sync = () => {
     if (destroyed) return;
+    if (phone) {
+      // Use the phone's own viewport; cross-frame intersection can lag after resizing.
+      const rect = canvas.getBoundingClientRect();
+      visible = rect.bottom > 0 && rect.top < innerHeight && rect.right > 0 && rect.left < innerWidth;
+    }
     canvas.dataset.rendering = String(visible && parentVisible && !document.hidden && !reduced.matches);
     cancelAnimationFrame(raf); raf = 0; lastFrame = -1;
     if (visible && parentVisible && !document.hidden) raf = requestAnimationFrame(tick);
   };
   let parentObserver;
+  const onParentVisibility = (event) => {
+    if (event.source !== window.parent || event.origin !== location.origin || event.data?.type !== "portfolio:phone-visibility") return;
+    parentVisible = event.data.visible; sync();
+  };
   if (phone && window.frameElement) {
     // The phone is same-origin: observe its element in the outer document.
     parentObserver = new window.parent.IntersectionObserver(([entry]) => { parentVisible = entry.isIntersecting; sync(); });
     parentObserver.observe(window.frameElement);
+    window.addEventListener("message", onParentVisibility);
+    window.addEventListener("scroll", sync, { passive: true });
+    window.parent.postMessage({ type: "portfolio:phone-ready" }, location.origin);
   } else parentVisible = true;
   const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: 0 });
   observer.observe(canvas);
@@ -32,5 +44,6 @@ export default function visibleCanvas(canvas, draw) {
     destroyed = true;
     cancelAnimationFrame(raf); observer.disconnect(); document.removeEventListener("visibilitychange", sync); reduced.removeEventListener("change", sync);
     parentObserver?.disconnect();
+      window.removeEventListener("message", onParentVisibility); window.removeEventListener("scroll", sync);
   };
 }

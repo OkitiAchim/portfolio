@@ -18,3 +18,22 @@
 @media(max-width:1023px){.a-story-shell{grid-template-columns:minmax(0,1fr)}.a-stage{width:100%;max-width:480px}.a-grid{left:0;right:0}}
 @media(prefers-reduced-motion:reduce){.flow-about *{transition:none!important;animation:none!important}.a-copy{filter:none!important;opacity:1!important}.a-story{height:auto!important}.a-pin{position:relative!important;height:auto!important}.a-values>button:hover{transform:none}}
 .a-signature{margin-top:28px}.a-signature strong{font-size:8px;letter-spacing:.14em;font-weight:450;text-transform:uppercase}.a-signature small{display:block;font-size:10px;margin-top:5px;color:#7f899a}@media(max-width:760px){.a-signature{margin-top:22px}.a-signature strong{font-size:7px}.a-signature small{font-size:9px}}@media(min-width:1024px) and (max-height:699px){.a-signature{margin-top:13px}.a-signature small{font-size:8px}}
+
+/* Share the desktop phone timeline, with a separate pin after the mobile copy. */
+.a-phone-track,.a-phone-pin{display:contents}
+@media(max-width:1023px){
+  .a-story[data-sequence-enabled=true]{height:auto}
+  .a-story[data-sequence-enabled=true] .a-pin{position:relative;height:auto;top:auto}
+  .a-story[data-sequence-enabled=true] .a-story-shell{height:auto;padding-top:55px;padding-bottom:30px}
+  .a-story[data-sequence-enabled=true] .a-phone-track{display:block;height:calc(100svh - 104px + 1050px);min-width:0}
+  .a-story[data-sequence-enabled=true] .a-phone-pin{display:block;position:sticky;top:104px;height:calc(100svh - 104px);padding-top:12px}
+  .a-story[data-sequence-enabled=true] .a-stage{height:calc(100% - 100px);max-height:650px;margin:0 auto}
+  .a-story[data-sequence-enabled=true] .a-live-phone{height:calc(100% - 28px);width:auto;aspect-ratio:292/622;max-width:82%;top:16px}
+  .a-story[data-sequence-enabled=true] .a-hardware{border-radius:36px}
+  .a-story[data-sequence-enabled=true] .a-screen{border-radius:28px}
+  .a-story[data-sequence-enabled=true] .a-sequence{bottom:20px;gap:12px;flex-wrap:wrap;padding-top:10px;letter-spacing:.03em}
+  .a-story[data-sequence-enabled=true] .a-sequence>div{min-width:30px}
+  .a-story[data-sequence-enabled=true] .a-sequence button,.a-story[data-sequence-enabled=true] .a-sequence>a{display:inline-flex;align-items:center;min-height:44px}
+}
+@media(max-width:760px){.a-story[data-sequence-enabled=true] .a-story-shell{padding-top:38px}}
+@media(max-width:359px){.a-story[data-sequence-enabled=true] .a-sequence{gap:8px;font-size:7px}.a-story[data-sequence-enabled=true] .a-sequence button,.a-story[data-sequence-enabled=true] .a-sequence>a{font-size:8px}}
