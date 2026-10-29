@@ -12,8 +12,12 @@ const projects = [
     description: "Making complex environmental data navigable. An interactive map for exploring flood susceptibility, population exposure, and the evidence behind every layer.",
     detail: "Environmental intelligence for Akure South, combining flood susceptibility screening with population exposure, land cover, rainfall, and terrain layers. Location profiles connect the map to supporting evidence, while the data sources view explains methods, attribution, and known limitations.",
     image: "/projects/erip_map.png", secondaryImage: "/projects/erip_details.png",
-    imageAlt: "ERIP environmental risk map and location profile for Akure South",
-    secondaryAlt: "ERIP data sources showing methods, attribution, and limitations",
+    imageAlt: "ERIP interactive risk map with dataset layer controls",
+    secondaryAlt: "ERIP data sources and Ask ERIP assistant showing methods, attribution, and limitations",
+    gallery: [
+      { image: "/projects/erip_location.png", alt: "ERIP flood susceptibility map and selected location profile for Akure South", label: "Map detail / Location evidence" },
+      { image: "/projects/erip_analytics.png", alt: "ERIP flood susceptibility histogram and evidence interpretation panel", label: "Analytics / Flood susceptibility screening" },
+    ],
     detailLabel: "The evidence behind the map",
   },
   {
@@ -77,6 +81,10 @@ export default function Projects() {
           <p className="flow-eyebrow">{selected.category} / {selected.name}</p>
           <h2 id="flow-project-title">{selected.title}</h2><p className="flow-dialog-description">{selected.detail}</p>
           <img className="flow-dialog-image" src={selected.image} alt={selected.imageAlt} />
+          {selected.gallery?.map((view) => <div key={view.image}>
+            <p className="flow-eyebrow">{view.label}</p>
+            <img className="flow-dialog-image" src={view.image} alt={view.alt} loading="lazy" />
+          </div>)}
           <p className="flow-eyebrow">Interface detail / {selected.detailLabel}</p>
           <img className="flow-dialog-image" src={selected.secondaryImage} alt={selected.secondaryAlt} loading="lazy" />
           <a className="flow-text-link" href="#contact" onClick={() => setSelected(null)}>Have something in mind? <span aria-hidden="true"><ArrowIcon direction="ne" /></span></a>
@@ -85,3 +93,4 @@ export default function Projects() {
     </section>
   );
 }
+
